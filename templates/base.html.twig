@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.0/lux/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+		<title>GlowUppp -
+			{% block title %}{% endblock %}
+		</title>
+		<link rel="stylesheet" href="{{asset('css/style.css')}}">
+		{% block stylesheets %}{% endblock %}
+	</head>
+	<body>
+		{% include "partials/header.html.twig" %}
+
+		<div class="container">
+		
+		 {% block body %}{% endblock %}
+			</div>
+
+			<script src="public/js/app.js"></script>
+
+			{% block javascripts %}{% endblock %}
+
+			{% include "partials/scripts.html.twig" %}
+			{% include "partials/footer.html.twig" %}
+		</body>
+	</html>
