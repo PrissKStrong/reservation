@@ -1,0 +1,8 @@
+li.nav-item{
+    align-items: center !important;
+    justify-content: center !important;
+    display: flex !important;
+}
+nav.navbar.navbar-expand-lg.navbar-light.bg-light{
+    padding: 5px !important;
+}

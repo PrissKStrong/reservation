@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\EqualTo;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
@@ -38,6 +40,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
+     * @Assert\EqualTo(propertyPath = "password", message="Votre mot de passe doit être identique à celui entré ci-dessus")
+     */
+    public $confirm_password;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $companyName;
@@ -48,7 +55,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $tel;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $timeLapse;
 
@@ -63,12 +70,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $endTime;
 
     /**
-     * @ORM\Column(type="binary")
+     * @ORM\Column(type="binary", nullable=true)
      */
     private $showPreta;
 
     /**
-     * @ORM\Column(type="binary")
+     * @ORM\Column(type="binary", nullable=true)
      */
     private $subscriberUser;
 
