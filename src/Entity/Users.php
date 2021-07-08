@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,6 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
+ * @ApiResource()
  */
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -70,12 +72,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $endTime;
 
     /**
-     * @ORM\Column(type="binary", nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $showPreta;
 
     /**
-     * @ORM\Column(type="binary", nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $subscriberUser;
 

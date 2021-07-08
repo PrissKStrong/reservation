@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes prestations{% endblock %}
+
+{% block body %}
+
+{{ form_start(addPresta) }}
+
+    <div class="form-group">
+        {{ form_row(addPresta.name, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_row(addPresta.image, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_row(addPresta.prestaTime, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Ajouter</button>
+
+    <div class="row mt-5 ml-1">
+        <h2>Vos prestations</h2>
+    </div>
+    
+    <div class="row">
+        
+        {% for p in presta %}
+        <div class="col-3 mt-5 mb-5">
+            <div class="card">
+                <img class="card-img-top" src="{{ p.image }}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">{{ p.name }}</h5>
+                  <p class="card-text">Durée de la prestation en minutes: {{ p.prestaTime }}</p>
+                  <a href="#" class="btn btn-warning">Éditer</a>
+                </div>
+              </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{{ form_end(addPresta) }}
+
+{% endblock %}

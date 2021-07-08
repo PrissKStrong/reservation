@@ -2,53 +2,77 @@
 
 namespace App\Entity;
 
-use App\Repository\AppointmentsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AppointmentsRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AppointmentsRepository::class)
+ * @ApiResource(
+ *  normalizationContext={"groups"={"read:appointments"}},
+ *  itemOperations={
+ *      "get"={},
+ *  },
+ *  collectionOperations={
+ *       "get"={},
+ *       "get_Appointments"={
+ *          "method"="GET",
+ *          "path"="/appointments/get/{id}",
+ *          "controller"=App\Controller\Api\GetAppointments::class
+ *       }
+ *  }
+ * )
  */
 class Appointments
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+   /**
+    * @ORM\Id
+    * @ORM\GeneratedValue
+    * @ORM\Column(type="integer")
+    * @Groups({"read:appointments"})
+    */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read:appointments"})
      */
     private $start;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read:appointments"})
      */
     private $end;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointments"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointments"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointments"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointments"})
      */
     private $tel;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:appointments"})
      */
     private $prestation;
 
