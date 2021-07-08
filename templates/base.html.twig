@@ -3,35 +3,31 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.0/lux/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/lux/bootstrap.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
-		
+
 		<title>RDV -
 			{% block title %}{% endblock %}
 		</title>
-		
-		<link rel="stylesheet" href="{{asset('css/style.css')}}">
-		
-		{% block stylesheets %}{% endblock %}
-		
-	</head>
-	<body>
 
-		{% include "partials/header.html.twig" %}
+		<link rel="stylesheet" href="{{asset('css/style.css')}}"> {% block stylesheets %}{% endblock %}
 
-		<div class="container">
-		
-		 	{% block body %}{% endblock %}
+		</head>
+		<body>
 
-		</div>
+			{% include "partials/header.html.twig" %}
 
-		{% include "partials/footer.html.twig" %}
+			<div class="container"> {% block body %}{% endblock %}
 
-		{% include "partials/scripts.html.twig" %}
+				</div>
 
-		<script src="{{asset('js/app.js')}}"></script>
+				{% include "partials/footer.html.twig" %}
 
-		{% block javascripts %}{% endblock %}
+				{% include "partials/scripts.html.twig" %}
 
-	</body>
-</html>
+				<script src="{{asset('js/app.js')}}"></script>
+
+				{% block javascripts %}{% endblock %}
+
+			</body>
+		</html>
