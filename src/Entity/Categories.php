@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoriesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,9 +35,14 @@ class Categories
     private $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Prestations::class, inversedBy="category")
+     * @ORM\OneToMany(targetEntity=Prestations::class, mappedBy="category")
      */
     private $prestations;
+
+    public function __construct()
+    {
+        $this->prestations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -78,15 +85,39 @@ class Categories
         return $this;
     }
 
-    public function getPrestations(): ?Prestations
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Collection|Prestations[]
+     */
+    public function getPrestations(): Collection
     {
         return $this->prestations;
     }
 
-    public function setPrestations(?Prestations $prestations): self
+    public function addPrestation(Prestations $prestation): self
     {
-        $this->prestations = $prestations;
+        if (!$this->prestations->contains($prestation)) {
+            $this->prestations[] = $prestation;
+            $prestation->setCategory($this);
+        }
 
         return $this;
     }
+
+    public function removePrestation(Prestations $prestation): self
+    {
+        if ($this->prestations->removeElement($prestation)) {
+            // set the owning side to null (unless already changed)
+            if ($prestation->getCategory() === $this) {
+                $prestation->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes infos{% endblock %}
+{% block title %}Mes infos
+{% endblock %}
 
 {% block body %}
 
@@ -18,9 +19,14 @@
                     {{ form_row(user.endTime, {'attr': {'class': 'form-control'}}) }}
                 </div>
 
-                <div class="form-group">
+                 <div class="form-group">
+                    {{ form_row(user.employeesNbr, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                  <div class="form-group">
                     {{ form_row(user.showPreta, {'attr': {'class': 'form-control'}}) }}
                 </div>
+
             
                 <button type="submit" class="btn btn-success">Confirmer</button>
 

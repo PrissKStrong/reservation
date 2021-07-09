@@ -96,6 +96,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $prestation;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $employeesNbr;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
@@ -362,6 +367,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $prestation->setUsers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmployeesNbr(): ?int
+    {
+        return $this->employeesNbr;
+    }
+
+    public function setEmployeesNbr(?int $employeesNbr): self
+    {
+        $this->employeesNbr = $employeesNbr;
 
         return $this;
     }

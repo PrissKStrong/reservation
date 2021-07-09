@@ -70,15 +70,8 @@
         events: agendaEvents,
         select: (arg) => {
 
-          document.getElementById('exampleModal').classList.add('show');
-          document.getElementById('exampleModal').style ='display:block; padding-right:15px;';
-          document.getElementById('exampleModal').setAttribute('aria-modal', true);
-          document.getElementById('exampleModal').removeAttribute('aria-hidden');
-          var body = document.getElementsByTagName('body');
-          for(var i = 0; i < body.length; i++){
-            body[i].classList.add('modal-open');
-            body[i].style = "padding-right: 15px;"
-          }
+          let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
+          myModal.show();
 
           document.getElementById('saveRdv').addEventListener('click', function(){
             agendaEvents.push({

@@ -16,7 +16,7 @@ class AddUserInfosType extends AbstractType
     {
         $builder
             ->add('timeLapse', NumberType::class, [
-                'label' => 'Temps pour vos créneaux de base'
+                'label' => 'Temps pour vos créneaux de base en minutes'
             ])
             ->add('startTime', TimeType::class, [
                 'label' => 'Début de journée'
@@ -26,6 +26,9 @@ class AddUserInfosType extends AbstractType
             ])
             ->add('showPreta', CheckboxType::class, [
                 'label' => 'Affichez vos prestations'
+            ])
+            ->add('employeesNbr', NumberType::class, [
+                'label' => 'Nombre d\'employés'
             ])
         ;
     }

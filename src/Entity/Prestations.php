@@ -40,14 +40,9 @@ class Prestations
     private $users;
 
     /**
-     * @ORM\OneToMany(targetEntity=Categories::class, mappedBy="prestations")
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="prestations")
      */
     private $category;
-
-    public function __construct()
-    {
-        $this->category = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -102,34 +97,16 @@ class Prestations
         return $this;
     }
 
-    /**
-     * @return Collection|Categories[]
-     */
-    public function getCategory(): Collection
+    public function getCategory(): ?Categories
     {
         return $this->category;
     }
 
-    public function addCategory(Categories $category): self
+    public function setCategory(?Categories $category): self
     {
-        if (!$this->category->contains($category)) {
-            $this->category[] = $category;
-            $category->setPrestations($this);
-        }
+        $this->category = $category;
 
         return $this;
     }
-
-    public function removeCategory(Categories $category): self
-    {
-        if ($this->category->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getPrestations() === $this) {
-                $category->setPrestations(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
 }
