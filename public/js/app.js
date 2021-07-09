@@ -37,3 +37,4 @@ function generateAvatar(
       );
       avatar.appendChild(img);
 
+

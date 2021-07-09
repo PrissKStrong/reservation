@@ -4,5 +4,32 @@
 {% endblock %}
 
 {% block body %}
-	<p>{{ test }}</p>
+
+{{ form_start(user) }}
+
+                <div class="form-group">
+                    {{ form_row(user.timeLapse, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_row(user.startTime, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_row(user.endTime, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                 <div class="form-group">
+                    {{ form_row(user.employeesNbr, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                  <div class="form-group">
+                    {{ form_row(user.showPreta, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+            
+                <button type="submit" class="btn btn-success">Confirmer</button>
+
+{{ form_end(user) }}
+      
 {% endblock %}

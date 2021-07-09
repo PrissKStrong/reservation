@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes infos{% endblock %}
+
+{% block body %}
+
+<input type="hidden" value="{{ user }}" id="userId">
+<div id='calendar'></div>
+      
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+
+      var userId = document.getElementById('userId').value;
+
+      var agendaEvents = [];
+
+      setTimeout(() => {
+        
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+              initialView: 'timeGridWeek',
+              headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listMonth',
+              },
+              buttonText: {
+                today: "Aujourd'hui",
+                day: "Jour",
+                month: "Mois",
+                week: "Semaine",
+                list: "Liste"
+              },
+              views: {
+                listMonth: {
+                  noEventsText: "Aucun rendez-vous à afficher.",        
+                }
+              },
+              locale: 'fr',
+              nowIndicator: true,
+              selectable: true,
+              editable: true,
+              events: agendaEvents
+            });
+            calendar.render();
+            console.log(calendar)
+   
+      }, 1000)
+
+      setTimeout(() => {
+        console.log(calendar.title)
+      }, 2000)
+
+      
+
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/appointments/get/'+userId);
+      xhr.onload = () => {
+          const res = JSON.parse(xhr.response);
+          console.log(res);
+          for(var i = 0; i < res['hydra:member'][0].length; i++){
+              var rdv = res['hydra:member'][0][i];
+              agendaEvents.push({
+                  title: rdv.firstname+' '+rdv.lastname,
+                  start: new Date(rdv.start).toISOString(),
+                  end: new Date(rdv.end).toISOString(),
+                  id: rdv.id
+              })
+          }
+          console.log(agendaEvents)
+      }
+      xhr.setRequestHeader("Content-Type", "application/json");    
+      xhr.send();
+
+    </script>
+
+{% endblock %}
