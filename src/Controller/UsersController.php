@@ -6,6 +6,7 @@ use App\Entity\Prestations;
 use App\Entity\Users;
 use App\Form\AddPrestationType;
 use App\Form\AddUserInfosType;
+use App\Repository\AppointmentsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,13 +57,13 @@ class UsersController extends AbstractController
     /**
      * @Route("/Agenda/{id}", name="agenda")
      */
-    public function Agenda($id){
+    public function Agenda($id, AppointmentsRepository $appointmentsRepository){
 
 
         if($id === strval($this->getUser()->getId())){
 
             return $this->render("users/agenda.html.twig", [
-                'user' => $id
+                'user' => $id,
             ]);
 
         }else{
