@@ -22,7 +22,43 @@
         </button>
       </div>
       <div class="modal-body">
-        ...
+
+        <div class="form-group">
+          <label for="firstname">Prénom</label>
+          <input type="text" value="" id="firstname" name="firstname" class="form-control">
+        </div>   
+        
+        <div class="form-group">
+          <label for="lastname">Nom</label>
+          <input type="text" value="" id="lastname" name="lastname" class="form-control">
+        </div>   
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" value="" id="email" name="email" class="form-control">
+        </div>    
+
+        <div class="form-group">
+          <label for="tel">Tél</label>
+          <input type="tel" value="" id="tel" name="tel" class="form-control">
+        </div>  
+
+        <div class="form-group">
+          <label for="selectPresta">Prestation</label>
+          <select value="" id="selectPresta" class="form-control">
+          </select>
+        </div>   
+
+        <div class="form-group">
+          <label for="start">Début</label>
+          <input type="datetime-local" value="" id="start" name="start" class="form-control">
+        </div>  
+
+        <div class="form-group">
+          <label for="end">Fin</label>
+          <input type="datetime-local" value="" id="end" name="end" class="form-control">
+        </div>    
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -40,6 +76,7 @@
       var userId = document.getElementById('userId').value;
 
       var agendaEvents = [];
+      var prestations = [];
 
       var cal = null;
 
@@ -69,19 +106,53 @@
         editable: true,
         events: agendaEvents,
         select: (arg) => {
+    
+          document.getElementById('start').value = formatDate(arg.start);
+          document.getElementById('end').value = formatDate(arg.end);  
 
           let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
           myModal.show();
 
+          for(var i = 0; i < prestations.length; i++){
+            if(prestations[i].id === parseInt(document.getElementById('selectPresta').value)){
+              var date = new Date(arg.start);
+              date.setMinutes(date.getMinutes() + prestations[i].prestaTime)
+              document.getElementById('end').value = formatDate(date); 
+            }
+          }      
+
+          document.getElementById('selectPresta').onchange = (event) => {
+            for(var i = 0; i < prestations.length; i++){
+              if(prestations[i].id === parseInt(event.target.value)){
+                var date = new Date(arg.start);
+                date.setMinutes(date.getMinutes() + prestations[i].prestaTime)
+                document.getElementById('end').value = formatDate(date); 
+              }
+            }      
+          }
+
           document.getElementById('saveRdv').addEventListener('click', function(){
+
+            var formulaire = {
+              firstname: document.getElementById('firstname').value,
+              lastname: document.getElementById('lastname').value,
+              email: document.getElementById('email').value,
+              tel: document.getElementById('tel').value,
+              start: document.getElementById('start').value,
+              end: document.getElementById('end').value,
+              prestation: "/api/prestations/"+document.getElementById('selectPresta').value,
+              users: "/api/users/"+userId
+            }
+            console.log(formulaire)
+
             agendaEvents.push({
-              id: null,
-              title: 'test',
-              start: arg.start.toISOString(),
-              end: arg.end.toISOString(),
+              id: -1,
+              title: formulaire.firstname+' '+formulaire.lastname,
+              start: formulaire.start,
+              end: formulaire.end,
+              description: document.getElementById('selectPresta').value
             })
-            console.log(agendaEvents);
-            console.log(cal.view.title)
+            myModal.hide();
             
             setTimeout(() => {
               
@@ -91,11 +162,28 @@
               showCalendar();
               
             }, 100)
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/appointments');
+            xhr.onload = () => {
+                const res = JSON.parse(xhr.response);     
+                for(var i = 0; i < agendaEvents.length; i++){
+                  if(agendaEvents[i].id === -1){
+                    agendaEvents[i].id = res.id
+                  }
+                }   
+                console.log(agendaEvents); 
+            }
+            xhr.setRequestHeader("Content-Type", "application/json");    
+            xhr.send(JSON.stringify(formulaire));
+
           })      
         }
       }; 
 
       setTimeout(showCalendar, 500);
+      callAppointments();
+      callPrestations();
 
       function showCalendar(){
             var calendarEl = document.querySelector('#calendar');
@@ -108,27 +196,58 @@
             cal = calendar;     
             calendar.render();
       }
-      
 
-      
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/api/appointments/get/'+userId);
-      xhr.onload = () => {
-          const res = JSON.parse(xhr.response);
-          console.log(res);
-          for(var i = 0; i < res['hydra:member'][0].length; i++){
-              var rdv = res['hydra:member'][0][i];
-              agendaEvents.push({
-                  title: rdv.firstname+' '+rdv.lastname,
-                  start: new Date(rdv.start).toISOString(),
-                  end: new Date(rdv.end).toISOString(),
-                  id: rdv.id
-              })
-          }
-          console.log(agendaEvents)
+      function formatDate(arg){
+
+        var date = new Date(arg);
+        return date.toISOString().substring(0, 16);
+
       }
-      xhr.setRequestHeader("Content-Type", "application/json");    
-      xhr.send();
+
+      function callAppointments(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/appointments/get/'+userId);
+        xhr.onload = () => {
+            const res = JSON.parse(xhr.response);
+            console.log(res);
+            for(var i = 0; i < res['hydra:member'][0].length; i++){
+                var rdv = res['hydra:member'][0][i];
+                agendaEvents.push({
+                    title: rdv.firstname+' '+rdv.lastname,
+                    start: new Date(rdv.start).toISOString(),
+                    end: new Date(rdv.end).toISOString(),
+                    id: rdv.id
+                })
+            }
+            console.log(agendaEvents)
+        }
+        xhr.setRequestHeader("Content-Type", "application/json");    
+        xhr.send();
+      }
+
+      function callPrestations(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/prestations/get/'+userId);
+        xhr.onload = () => {
+            const res = JSON.parse(xhr.response);
+            console.log(res);
+            for(var i = 0; i < res['hydra:member'][0].length; i++){
+                var presta = res['hydra:member'][0][i];
+                prestations.push(presta)
+            }
+            console.log(prestations)
+
+            var selectPresta = document.getElementById('selectPresta');
+            for(var i = 0; i < prestations.length; i++){
+              var options = document.createElement('option');
+              options.value = prestations[i].id;
+              selectPresta.appendChild(options);
+              options.innerHTML = prestations[i].name;
+            }
+        }
+        xhr.setRequestHeader("Content-Type", "application/json");    
+        xhr.send();
+      }  
 
     </script>
 

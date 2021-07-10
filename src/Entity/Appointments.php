@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  },
  *  collectionOperations={
  *       "get"={},
+ *       "post"={},
  *       "get_Appointments"={
  *          "method"="GET",
  *          "path"="/appointments/get/{id}",

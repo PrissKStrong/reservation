@@ -19,22 +19,20 @@ class PrestationsRepository extends ServiceEntityRepository
         parent::__construct($registry, Prestations::class);
     }
 
-    // /**
-    //  * @return Prestations[] Returns an array of Prestations objects
-    //  */
-    /*
-    public function findByExampleField($value)
+   /**
+    * @return Prestations[] Returns an array of Prestations objects
+    */
+    public function findPrestaByUser($user)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('p.users = :val')
+            ->setParameter('val', $user)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Prestations

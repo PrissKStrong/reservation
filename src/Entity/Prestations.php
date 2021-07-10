@@ -2,13 +2,29 @@
 
 namespace App\Entity;
 
-use App\Repository\PrestationsRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PrestationsRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PrestationsRepository::class)
+ * @ApiResource(
+ *  normalizationContext={"groups"={"read:presta"}},
+ *  itemOperations={
+ *      "get"={},
+ *  },
+ *  collectionOperations={
+ *       "get"={},
+ *       "get_prestations"={
+ *          "method"="GET",
+ *          "path"="/prestations/get/{id}",
+ *          "controller"=App\Controller\Api\GetPrestations::class
+ *       }
+ *  }
+ * )
  */
 class Prestations
 {
@@ -16,21 +32,25 @@ class Prestations
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:presta"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:presta"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:presta"})
      */
     private $image;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read:presta"})
      */
     private $prestaTime;
 
@@ -41,6 +61,7 @@ class Prestations
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="prestations")
+     * @Groups({"read:presta"})
      */
     private $category;
 
