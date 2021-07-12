@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Prestations;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AppointmentsRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -13,6 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  normalizationContext={"groups"={"read:appointments"}},
  *  itemOperations={
  *      "get"={},
+ *      "put"={},
+ *      "delete"={}
  *  },
  *  collectionOperations={
  *       "get"={},
@@ -72,7 +75,7 @@ class Appointments
     private $tel;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Prestations::class, inversedBy="appointement")
      * @Groups({"read:appointments"})
      */
     private $prestation;
@@ -159,12 +162,12 @@ class Appointments
         return $this;
     }
 
-    public function getPrestation(): ?string
+    public function getPrestation(): ?Prestations
     {
         return $this->prestation;
     }
 
-    public function setPrestation(string $prestation): self
+    public function setPrestation(?Prestations $prestation): self
     {
         $this->prestation = $prestation;
 

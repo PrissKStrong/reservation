@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Appointments;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PrestationsRepository;
 use Doctrine\Common\Collections\Collection;
@@ -32,25 +33,25 @@ class Prestations
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $image;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $prestaTime;
 
@@ -60,10 +61,20 @@ class Prestations
     private $users;
 
     /**
+     * @ORM\OneToMany(targetEntity=Appointments::class, mappedBy="prestation")
+     */
+    private $appointement;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="prestations")
      * @Groups({"read:presta"})
      */
     private $category;
+
+    public function __construct()
+    {
+        $this->appointement = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -126,6 +137,36 @@ class Prestations
     public function setCategory(?Categories $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Appointments[]
+     */
+    public function getAppointement(): Collection
+    {
+        return $this->appointement;
+    }
+
+    public function addAppointement(Appointments $appointement): self
+    {
+        if (!$this->appointement->contains($appointement)) {
+            $this->appointement[] = $appointement;
+            $appointement->setPrestation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointement(Appointments $appointement): self
+    {
+        if ($this->appointement->removeElement($appointement)) {
+            // set the owning side to null (unless already changed)
+            if ($appointement->getPrestation() === $this) {
+                $appointement->setPrestation(null);
+            }
+        }
 
         return $this;
     }
