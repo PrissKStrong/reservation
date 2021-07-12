@@ -37,7 +37,6 @@ function generateAvatar(
       );
       avatar.appendChild(img);
 
-  // Toggle input breaktime
 
 
 

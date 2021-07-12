@@ -12,6 +12,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
 class AddPrestationType extends AbstractType
 {
@@ -42,11 +44,21 @@ class AddPrestationType extends AbstractType
             ])
             ->add('category', EntityType::class, [
                 'class' => Categories::class,
-                'label' => 'Selectionnez une catégorie ',
+                'label' => 'Selectionnez une catégorie',
                 'choices' => $this->categoryRepository->findCategoryByUser($this->security->getUser())
             ])
-
-           ;
+            ->add('agendaColor', ColorType::class, [
+                'label' => 'Choississez la couleur de votre prestation',
+                'required' => false,
+            ])
+            ->add('breakTime', NumberType::class, [
+                'label' => 'Durée du temps de pause',
+                'required' => false
+            ])
+            ->add('prestaTime2', NumberType::class, [
+                'label' => 'Durée de la seconde parti de la prestation',
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -30,12 +30,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Appointments
 {
-   /**
-    * @ORM\Id
-    * @ORM\GeneratedValue
-    * @ORM\Column(type="integer")
-    * @Groups({"read:appointments"})
-    */
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     * @Groups({"read:appointments"})
+     */
     private $id;
 
     /**
@@ -84,6 +84,16 @@ class Appointments
      * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="appointement")
      */
     private $users;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $note;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $groupeId;
 
     public function getId(): ?int
     {
@@ -182,6 +192,30 @@ class Appointments
     public function setUsers(?Users $users): self
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getGroupeId(): ?int
+    {
+        return $this->groupeId;
+    }
+
+    public function setGroupeId(?int $groupeId): self
+    {
+        $this->groupeId = $groupeId;
 
         return $this;
     }

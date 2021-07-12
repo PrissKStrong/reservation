@@ -67,9 +67,27 @@ class Prestations
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="prestations")
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read:presta", "read:appointments"})
+     */
+    private $breakTime;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"read:presta", "read:appointments"})
+     */
+    private $agendaColor;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read:presta", "read:appointments"})
+     */
+    private $prestaTime2;
 
     public function __construct()
     {
@@ -167,6 +185,42 @@ class Prestations
                 $appointement->setPrestation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBreakTime(): ?int
+    {
+        return $this->breakTime;
+    }
+
+    public function setBreakTime(?int $breakTime): self
+    {
+        $this->breakTime = $breakTime;
+
+        return $this;
+    }
+
+    public function getAgendaColor(): ?string
+    {
+        return $this->agendaColor;
+    }
+
+    public function setAgendaColor(string $agendaColor): self
+    {
+        $this->agendaColor = $agendaColor;
+
+        return $this;
+    }
+
+    public function getPrestaTime2(): ?int
+    {
+        return $this->prestaTime2;
+    }
+
+    public function setPrestaTime2(?int $prestaTime2): self
+    {
+        $this->prestaTime2 = $prestaTime2;
 
         return $this;
     }
