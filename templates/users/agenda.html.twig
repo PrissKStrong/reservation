@@ -1,17 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes infos{% endblock %}
+{% block title %}Mon agenda{% endblock %}
 
 {% block body %}
 
 <input type="hidden" value="{{ user }}" id="userId">
 <div id='calendar' class="mt-5 mb-5"></div>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
+<!-- Modal for adding rdv -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -22,6 +18,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <h6 class="card-subtitle mb-2 text-muted" id="cardSubtitle"></h6>
 
         <div class="form-group">
           <label for="firstname">Prénom</label>
@@ -51,7 +48,7 @@
 
         <div class="form-group">
           <label for="start">Début</label>
-          <input type="datetime-local" value="" id="start" name="start" class="form-control">
+          <input type="datetime-local" value="" id="start" name="start" class="form-control" disabled="disabled">
         </div>  
 
         <div class="form-group">
@@ -61,8 +58,72 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
         <button type="button" class="btn btn-primary" id="saveRdv">Ajouter le RDV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for edit rdv -->
+<div class="modal fade" id="editRdvModal" tabindex="-1" role="dialog" aria-labelledby="editRdvModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ajout d'un RDV</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label for="firstnameEdit">Prénom</label>
+          <input type="text" value="" id="firstnameEdit" name="firstnameEdit" class="form-control">
+        </div>   
+        
+        <div class="form-group">
+          <label for="lastnameEdit">Nom</label>
+          <input type="text" value="" id="lastnameEdit" name="lastnameEdit" class="form-control">
+        </div>   
+
+        <div class="form-group">
+          <label for="emailEdit">E-mail</label>
+          <input type="email" value="" id="emailEdit" name="emailEdit" class="form-control">
+        </div>    
+
+        <div class="form-group">
+          <label for="telEdit">Tél</label>
+          <input type="tel" value="" id="telEdit" name="telEdit" class="form-control">
+        </div>  
+
+        <div class="form-group">
+          <label for="selectPrestaEdit">Prestation</label>
+          <select value="" id="selectPrestaEdit" class="form-control">
+          </select>
+        </div>   
+
+        <div class="form-group">
+          <label for="startEdit">Début</label>
+          <input type="datetime-local" value="" id="startEdit" name="startEdit" class="form-control" disabled="disabled">
+        </div>  
+
+        <div class="form-group">
+          <label for="endEdit">Fin</label>
+          <input type="datetime-local" value="" id="endEdit" name="endEdit" class="form-control">
+        </div>  
+
+        <div class="form-group">
+          <label for="note"></label>
+          <input type="text" value="" id="note" name="note" class="form-control">
+        </div>  
+
+      </div>
+      <div class="modal-footer">     
+        <button type="button" class="btn btn-danger" id="deleteRdv">Supprimer</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-warning" id="updateRdv">Mettre à jour</button>
       </div>
     </div>
   </div>
@@ -73,12 +134,23 @@
 
     <script>
 
+      // VARIABLES/ARRAY PART
+
       var userId = document.getElementById('userId').value;
+      var userInfos = [];
 
       var agendaEvents = [];
       var prestations = [];
 
       var cal = null;
+
+      let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
+      let myModalEdit = new bootstrap.Modal(document.getElementById('editRdvModal'), {});
+
+      var x = 0;
+
+
+      // FULLCALENDAR OPTIONS PART
 
       var calendarOptions = {
         initialView: 'timeGridWeek',
@@ -105,12 +177,17 @@
         selectable: true,
         editable: true,
         events: agendaEvents,
+        slotMinTime: '',
+        slotMaxTime: '',
+        height: 'auto',
+        allDaySlot: false,
         select: (arg) => {
     
           document.getElementById('start').value = formatDate(arg.start);
           document.getElementById('end').value = formatDate(arg.end);  
+          
+          document.getElementById('cardSubtitle').innerHTML = frenchDate(arg.start);
 
-          let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
           myModal.show();
 
           for(var i = 0; i < prestations.length; i++){
@@ -133,57 +210,251 @@
 
           document.getElementById('saveRdv').addEventListener('click', function(){
 
-            var formulaire = {
-              firstname: document.getElementById('firstname').value,
-              lastname: document.getElementById('lastname').value,
-              email: document.getElementById('email').value,
-              tel: document.getElementById('tel').value,
-              start: document.getElementById('start').value,
-              end: document.getElementById('end').value,
-              prestation: "/api/prestations/"+document.getElementById('selectPresta').value,
-              users: "/api/users/"+userId
-            }
-            console.log(formulaire)
+            x++;
 
-            agendaEvents.push({
-              id: -1,
-              title: formulaire.firstname+' '+formulaire.lastname,
-              start: formulaire.start,
-              end: formulaire.end,
-              description: document.getElementById('selectPresta').value
-            })
-            myModal.hide();
+            if(x === 1){
+
+              var formulaire = {
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                email: document.getElementById('email').value,
+                tel: document.getElementById('tel').value,
+                start: document.getElementById('start').value,
+                end: document.getElementById('end').value,
+                prestation: "/api/prestations/"+document.getElementById('selectPresta').value,
+                users: "/api/users/"+userId
+              }
+              console.log(formulaire)
+
+              agendaEvents.push({
+                id: -1,
+                title: formulaire.firstname+' '+formulaire.lastname,
+                start: formulaire.start,
+                end: formulaire.end,
+                description: document.getElementById('selectPresta').value
+              })
+              myModal.hide();
+
+              
+              setTimeout(() => {
+
+                document.getElementById('firstname').value = ""
+                document.getElementById('lastname').value = ""
+                document.getElementById('email').value = ""
+                document.getElementById('tel').value = ""
+                document.getElementById('start').value = ""
+                document.getElementById('end').value = ""
+                
+                calendarOptions = {...calendarOptions, events: agendaEvents};
+                console.log(calendarOptions)
+                document.querySelector('#calendar').innerHTML = "";
+                showCalendar();
+                
+              }, 100)
+
+              var xhr = new XMLHttpRequest();
+              xhr.open('POST', '/api/appointments');
+              xhr.onload = () => {
+                  const res = JSON.parse(xhr.response);     
+                  for(var i = 0; i < agendaEvents.length; i++){
+                    if(agendaEvents[i].id === -1){
+                      agendaEvents[i].id = res.id
+                    }
+                  }   
+                  console.log(agendaEvents);
+
+                  setTimeout(() => {
+                    x = 0;
+                  }, 1000)
+                  
+              }
+              xhr.setRequestHeader("Content-Type", "application/json");    
+              xhr.send(JSON.stringify(formulaire));
+            }
+          })  
+          
+        },
+        eventClick: (arg) => {
+
+          var rdvId = arg.event.id;
+          var firstname = document.getElementById('firstnameEdit');
+          var lastname = document.getElementById('lastnameEdit');
+          var email = document.getElementById('emailEdit');
+          var tel = document.getElementById('telEdit');
+          var start = document.getElementById('startEdit');
+          var end = document.getElementById('endEdit');
+
+          document.getElementById('selectPrestaEdit').onchange = (event) => {
+            for(var i = 0; i < prestations.length; i++){
+              if(prestations[i].id === parseInt(event.target.value)){
+                var date = new Date(start.value);
+                date.setMinutes(date.getMinutes() + prestations[i].prestaTime)
+                date.setHours(date.getHours() + 2)
+                end.value = formatDate(date); 
+              }
+            }      
+          }
+
+
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', '/api/appointments/'+rdvId);
+          xhr.onload = () => {
+              const res = JSON.parse(xhr.response);
+              console.log(res);
+              firstname.value = res.firstname;
+              lastname.value = res.lastname;
+              email.value = res.email;
+              tel.value = res.tel;
+              start.value = formatDate(res.start);
+              end.value = formatDate(res.end);
+              document.getElementById('selectPrestaEdit').value = res.prestation.id.toString();
+
+              myModalEdit.show();
+          }
+          xhr.setRequestHeader("Content-Type", "application/json");    
+          xhr.send();
+
+          document.getElementById('updateRdv').addEventListener('click', function(){
+
+            x++;
             
-            setTimeout(() => {
-              
-              calendarOptions = {...calendarOptions, events: agendaEvents};
-              console.log(calendarOptions)
-              document.querySelector('#calendar').innerHTML = "";
-              showCalendar();
-              
-            }, 100)
+            if(x === 1){
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/appointments');
-            xhr.onload = () => {
-                const res = JSON.parse(xhr.response);     
-                for(var i = 0; i < agendaEvents.length; i++){
-                  if(agendaEvents[i].id === -1){
-                    agendaEvents[i].id = res.id
+              var newStart = new Date(start.value);
+              newStart.setHours(newStart.getHours() + 2);
+              var newEnd = new Date(end.value);
+              newEnd.setHours(newEnd.getHours() + 2);
+
+              var formulaire = {
+                start: newStart,
+                end: newEnd,
+                firstname: firstname.value,
+                lastname: lastname.value,
+                email: email.value,
+                tel: tel.value,
+                prestation: "/api/prestations/"+document.getElementById('selectPrestaEdit').value,
+                users: "/api/users/"+userId
+              };
+              var xhr = new XMLHttpRequest();
+              xhr.open('PUT', '/api/appointments/'+rdvId);
+              xhr.onload = () => {
+                  const res = JSON.parse(xhr.response);
+                  console.log(res);
+
+                  for(var i = 0; i < agendaEvents.length; i++){
+                    if(res.id === parseInt(agendaEvents[i].id)){
+                      agendaEvents[i].title = firstname.value+' '+lastname.value;
+                      agendaEvents[i].start = newStart.toISOString();
+                      agendaEvents[i].end = newEnd.toISOString();
+                      agendaEvents[i].groupId = document.getElementById('selectPrestaEdit').value;
+                    }
                   }
-                }   
-                console.log(agendaEvents); 
-            }
-            xhr.setRequestHeader("Content-Type", "application/json");    
-            xhr.send(JSON.stringify(formulaire));
 
-          })      
+                  setTimeout(() => {
+                    x = 0;
+                  }, 1000)
+
+                  document.querySelector('#calendar').innerHTML = "";
+                  showCalendar();
+                  
+                  myModalEdit.hide();
+              }
+              xhr.setRequestHeader("Content-Type", "application/json");    
+              xhr.send(JSON.stringify(formulaire));
+            }
+          })
+
+          document.getElementById('deleteRdv').addEventListener('click', function(){
+
+            x++;
+            
+            if(x === 1){
+
+              var xhr = new XMLHttpRequest();
+              xhr.open('DELETE', '/api/appointments/'+rdvId);
+              xhr.onload = () => {
+
+                  for(var i = 0; i < agendaEvents.length; i++){
+                    if(parseInt(rdvId) === parseInt(agendaEvents[i].id)){
+                      agendaEvents.splice(i, 1)
+                    }
+                  }
+
+                  setTimeout(() => {
+                    x = 0;
+                  }, 1000)
+
+                  document.querySelector('#calendar').innerHTML = "";
+                  showCalendar();
+
+                  myModalEdit.hide();
+              }
+              xhr.setRequestHeader("Content-Type", "application/json");    
+              xhr.send();
+
+            }  
+
+          })
+   
+        },
+        eventDrop: (arg) => {
+          
+          var rdvId = arg.event.id;
+          var start = formatDate(arg.event.start);
+          var end = formatDate(arg.event.end);
+          var xhr = new XMLHttpRequest();
+              xhr.open('GET', '/api/appointments/'+rdvId);
+              xhr.onload = () => {
+                  const res = JSON.parse(xhr.response);
+                  console.log(res)
+                  var prestation = res.prestation;
+                  res.prestation = '/api/prestations/'+prestation.id;
+                  console.log(res)
+                  res.start = start;
+                  res.end = end;
+                  updateAppointments(res);                 
+              }
+              xhr.setRequestHeader("Content-Type", "application/json");    
+              xhr.send();
+
+        },
+        eventResize: (arg) => {
+          
+          var rdvId = arg.event.id;
+          var start = formatDate(arg.event.start);
+          var end = formatDate(arg.event.end);
+          var xhr = new XMLHttpRequest();
+              xhr.open('GET', '/api/appointments/'+rdvId);
+              xhr.onload = () => {
+                  const res = JSON.parse(xhr.response);
+                  console.log(res)
+                  var prestation = res.prestation;
+                  res.prestation = '/api/prestations/'+prestation.id;
+                  console.log(res)
+                  res.start = start;
+                  res.end = end;
+                  updateAppointments(res);                 
+              }
+              xhr.setRequestHeader("Content-Type", "application/json");    
+              xhr.send();
+
         }
       }; 
 
-      setTimeout(showCalendar, 500);
-      callAppointments();
-      callPrestations();
+
+
+
+      // ON INIT
+
+      window.onload = () => {
+        callPrestations();   
+        callUserInfos();    
+      }
+
+
+
+
+      // METHODES PART
 
       function showCalendar(){
             var calendarEl = document.querySelector('#calendar');
@@ -198,10 +469,48 @@
       }
 
       function formatDate(arg){
-
         var date = new Date(arg);
         return date.toISOString().substring(0, 16);
+      }
 
+      function frenchDate(date){
+        var aujourdhui = new Date(date); 
+        var annee = aujourdhui.getFullYear();
+        var mois =aujourdhui.getMonth()+1;
+        var jour = aujourdhui.getDate();
+        var joursemaine = aujourdhui.getDay();
+        var tab_jour = new Array("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi");
+        var tab_month = new Array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
+        return 'Le ' +  tab_jour[joursemaine] + ' ' + jour + ' ' + tab_month[mois - 1] + ' ' + annee ;
+      }
+
+      function formatDateForGetHour(dateForHour){
+        var date = new Date(dateForHour);
+        var hour = date.getHours() - 1;
+        if(hour < 10){
+          hour = '0'+hour;
+        }
+        var minutes = date.getMinutes();
+        if(minutes < 10){
+          minutes = '0'+minutes;
+        }
+        var fullHour = hour+':'+minutes+':00';
+        console.log(fullHour)
+        return fullHour.toString();
+      }
+
+      function updateAppointments(data){
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', '/api/appointments/'+data.id);
+        xhr.onload = () => {
+            const res = JSON.parse(xhr.response);
+            console.log({
+              type: "CONSOLE UP APPOINTMENTS",
+              data: res
+            });                
+        }
+        xhr.setRequestHeader("Content-Type", "application/json");    
+        xhr.send(JSON.stringify(data));
       }
 
       function callAppointments(){
@@ -216,10 +525,13 @@
                     title: rdv.firstname+' '+rdv.lastname,
                     start: new Date(rdv.start).toISOString(),
                     end: new Date(rdv.end).toISOString(),
-                    id: rdv.id
+                    id: rdv.id,
+                    groupId: rdv.prestation.id.toString()
                 })
             }
             console.log(agendaEvents)
+            document.querySelector('#calendar').innerHTML = "";
+            showCalendar();
         }
         xhr.setRequestHeader("Content-Type", "application/json");    
         xhr.send();
@@ -244,10 +556,36 @@
               selectPresta.appendChild(options);
               options.innerHTML = prestations[i].name;
             }
+
+            var selectPrestaEdit = document.getElementById('selectPrestaEdit');
+            for(var i = 0; i < prestations.length; i++){
+              var options = document.createElement('option');
+              options.value = prestations[i].id;
+              selectPrestaEdit.appendChild(options);
+              options.innerHTML = prestations[i].name;
+            }
         }
         xhr.setRequestHeader("Content-Type", "application/json");    
         xhr.send();
       }  
+
+      function callUserInfos(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/users/'+userId);
+        xhr.onload = () => {
+            const res = JSON.parse(xhr.response);
+            userInfos = res;
+            console.log({
+              type: "CONSOLE USER",
+              data: userInfos
+            });
+            calendarOptions.slotMinTime = formatDateForGetHour(userInfos.startTime);
+            calendarOptions.slotMaxTime = formatDateForGetHour(userInfos.endTime);
+            callAppointments();
+        }
+        xhr.setRequestHeader("Content-Type", "application/json");    
+        xhr.send();
+      }
 
     </script>
 

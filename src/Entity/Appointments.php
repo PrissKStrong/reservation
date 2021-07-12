@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Prestations;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AppointmentsRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -13,6 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  normalizationContext={"groups"={"read:appointments"}},
  *  itemOperations={
  *      "get"={},
+ *      "put"={},
+ *      "delete"={}
  *  },
  *  collectionOperations={
  *       "get"={},
@@ -27,12 +30,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Appointments
 {
-   /**
-    * @ORM\Id
-    * @ORM\GeneratedValue
-    * @ORM\Column(type="integer")
-    * @Groups({"read:appointments"})
-    */
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     * @Groups({"read:appointments"})
+     */
     private $id;
 
     /**
@@ -72,7 +75,7 @@ class Appointments
     private $tel;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Prestations::class, inversedBy="appointement")
      * @Groups({"read:appointments"})
      */
     private $prestation;
@@ -86,6 +89,11 @@ class Appointments
      * @ORM\Column(type="text", nullable=true)
      */
     private $note;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $groupeId;
 
     public function getId(): ?int
     {
@@ -164,12 +172,12 @@ class Appointments
         return $this;
     }
 
-    public function getPrestation(): ?string
+    public function getPrestation(): ?Prestations
     {
         return $this->prestation;
     }
 
-    public function setPrestation(string $prestation): self
+    public function setPrestation(?Prestations $prestation): self
     {
         $this->prestation = $prestation;
 
@@ -196,6 +204,18 @@ class Appointments
     public function setNote(?string $note): self
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getGroupeId(): ?int
+    {
+        return $this->groupeId;
+    }
+
+    public function setGroupeId(?int $groupeId): self
+    {
+        $this->groupeId = $groupeId;
 
         return $this;
     }

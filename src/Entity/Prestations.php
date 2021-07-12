@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Appointments;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PrestationsRepository;
 use Doctrine\Common\Collections\Collection;
@@ -32,25 +33,25 @@ class Prestations
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $image;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"read:presta"})
+     * @Groups({"read:presta", "read:appointments"})
      */
     private $prestaTime;
 
@@ -58,6 +59,11 @@ class Prestations
      * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="prestation")
      */
     private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Appointments::class, mappedBy="prestation")
+     */
+    private $appointement;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="prestations")
@@ -69,6 +75,21 @@ class Prestations
      * @ORM\Column(type="integer", nullable=true)
      */
     private $breakTime;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $agendaColor;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $prestaTime2;
+
+    public function __construct()
+    {
+        $this->appointement = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +156,36 @@ class Prestations
         return $this;
     }
 
+    /**
+     * @return Collection|Appointments[]
+     */
+    public function getAppointement(): Collection
+    {
+        return $this->appointement;
+    }
+
+    public function addAppointement(Appointments $appointement): self
+    {
+        if (!$this->appointement->contains($appointement)) {
+            $this->appointement[] = $appointement;
+            $appointement->setPrestation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointement(Appointments $appointement): self
+    {
+        if ($this->appointement->removeElement($appointement)) {
+            // set the owning side to null (unless already changed)
+            if ($appointement->getPrestation() === $this) {
+                $appointement->setPrestation(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getBreakTime(): ?int
     {
         return $this->breakTime;
@@ -143,6 +194,30 @@ class Prestations
     public function setBreakTime(?int $breakTime): self
     {
         $this->breakTime = $breakTime;
+
+        return $this;
+    }
+
+    public function getAgendaColor(): ?string
+    {
+        return $this->agendaColor;
+    }
+
+    public function setAgendaColor(string $agendaColor): self
+    {
+        $this->agendaColor = $agendaColor;
+
+        return $this;
+    }
+
+    public function getPrestaTime2(): ?int
+    {
+        return $this->prestaTime2;
+    }
+
+    public function setPrestaTime2(?int $prestaTime2): self
+    {
+        $this->prestaTime2 = $prestaTime2;
 
         return $this;
     }

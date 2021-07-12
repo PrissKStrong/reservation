@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
 class AddPrestationType extends AbstractType
 {
@@ -46,8 +47,8 @@ class AddPrestationType extends AbstractType
                 'label' => 'Selectionnez une catégorie',
                 'choices' => $this->categoryRepository->findCategoryByUser($this->security->getUser())
             ])
-            ->add('breakTime', CheckboxType::class, [
-                'label' => 'Souhaitez-vous ajouter un temps de pause?'
+            ->add('agendaColor', ColorType::class, [
+                'label' => 'Choississez la couleur de votre prestation'
             ])
 
            ;
