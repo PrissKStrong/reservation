@@ -65,6 +65,11 @@ class Prestations
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $breakTime;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -126,6 +131,18 @@ class Prestations
     public function setCategory(?Categories $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getBreakTime(): ?int
+    {
+        return $this->breakTime;
+    }
+
+    public function setBreakTime(?int $breakTime): self
+    {
+        $this->breakTime = $breakTime;
 
         return $this;
     }

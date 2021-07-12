@@ -18,8 +18,7 @@ class AddCategoryType extends AbstractType
             ])
             ->add('image', TextType::class, [
                 'label' => 'Insérez votre image'
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

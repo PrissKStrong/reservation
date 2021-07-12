@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class AddPrestationType extends AbstractType
 {
@@ -42,8 +43,11 @@ class AddPrestationType extends AbstractType
             ])
             ->add('category', EntityType::class, [
                 'class' => Categories::class,
-                'label' => 'Selectionnez une catégorie ',
+                'label' => 'Selectionnez une catégorie',
                 'choices' => $this->categoryRepository->findCategoryByUser($this->security->getUser())
+            ])
+            ->add('breakTime', CheckboxType::class, [
+                'label' => 'Souhaitez-vous ajouter un temps de pause?'
             ])
 
            ;
