@@ -18,12 +18,6 @@ class AddUserInfosType extends AbstractType
             ->add('timeLapse', NumberType::class, [
                 'label' => 'Temps pour vos créneaux de base en minutes'
             ])
-            ->add('startTime', TimeType::class, [
-                'label' => 'Début de journée'
-            ])
-            ->add('endTime', TimeType::class, [
-                'label' => 'Fin de journée'
-            ])
             ->add('showPreta', CheckboxType::class, [
                 'label' => 'Affichez vos prestations'
             ])

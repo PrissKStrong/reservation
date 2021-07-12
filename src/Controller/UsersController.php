@@ -39,13 +39,81 @@ class UsersController extends AbstractController
             $form = $this->createForm(AddUserInfosType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+    
+                $workingWeek = array();
+
+                if($request->get('lundiCheck') === "on"){
+                    $lundi = array(
+                        'daysOfWeek' => [1],
+                        'startTime' => $request->get('lundiStart'),
+                        'endTime' => $request->get('lundiEnd')
+                    );
+                    $workingWeek[] = $lundi;
+                }
+
+                if($request->get('mardiCheck') === "on"){
+                    $mardi = array(
+                        'daysOfWeek' => [2],
+                        'startTime' => $request->get('mardiStart'),
+                        'endTime' => $request->get('mardiEnd')
+                    );
+                    $workingWeek[] = $mardi;
+                }
+
+                if($request->get('mercrediCheck') === "on"){
+                    $mercredi = array(
+                        'daysOfWeek' => [3],
+                        'startTime' => $request->get('mercrediStart'),
+                        'endTime' => $request->get('mercrediEnd')
+                    );
+                    $workingWeek[] = $mercredi;
+                }
+
+                if($request->get('jeudiCheck') === "on"){
+                    $jeudi = array(
+                        'daysOfWeek' => [4],
+                        'startTime' => $request->get('jeudiStart'),
+                        'endTime' => $request->get('jeudiEnd')
+                    );
+                    $workingWeek[] = $jeudi;
+                }
+
+                if($request->get('vendrediCheck') === "on"){
+                    $vendredi = array(
+                        'daysOfWeek' => [5],
+                        'startTime' => $request->get('vendrediStart'),
+                        'endTime' => $request->get('vendrediEnd')
+                    );
+                    $workingWeek[] = $vendredi;
+                }
+
+                if($request->get('samediCheck') === "on"){
+                    $samedi = array(
+                        'daysOfWeek' => [6],
+                        'startTime' => $request->get('samediStart'),
+                        'endTime' => $request->get('samediEnd')
+                    );
+                    $workingWeek[] = $samedi;
+                }
+
+                if($request->get('dimancheCheck') === "on"){
+                    $dimanche = array(
+                        'daysOfWeek' => [7],
+                        'startTime' => $request->get('dimancheStart'),
+                        'endTime' => $request->get('dimancheEnd')
+                    );
+                    $workingWeek[] = $dimanche;
+                }
+
+                $user->setWorkDays($workingWeek);
+
                 $manager->persist($user);
                 $manager->flush();
                 return $this->redirectToRoute('home');
             }
             return $this->render("users/infos.html.twig", [
                 'user' => $form->createView(),
-                'test' => 'testtest' . $id
+                'userId' => $id,
             ]);
         } else {
 

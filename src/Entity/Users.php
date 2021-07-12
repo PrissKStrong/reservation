@@ -62,14 +62,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $timeLapse;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $startTime;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $endTime;
+    private $workDays;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -233,30 +228,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(?\DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
-    public function getEndTime(): ?\DateTimeInterface
-    {
-        return $this->endTime;
-    }
-
-    public function setEndTime(?\DateTimeInterface $endTime): self
-    {
-        $this->endTime = $endTime;
-
-        return $this;
-    }
-
     public function getShowPreta()
     {
         return $this->showPreta;
@@ -379,6 +350,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmployeesNbr(?int $employeesNbr): self
     {
         $this->employeesNbr = $employeesNbr;
+
+        return $this;
+    }
+
+    public function getWorkDays(): ?array
+    {
+        return $this->workDays;
+    }
+
+    public function setWorkDays(?array $workDays): self
+    {
+        $this->workDays = $workDays;
 
         return $this;
     }

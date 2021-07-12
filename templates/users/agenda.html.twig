@@ -144,6 +144,12 @@
 
       var x = 0;
 
+      var workSpec = []
+      var workMin
+      var workMax
+      var workDays
+      var hideDays
+
 
       // FULLCALENDAR OPTIONS PART
 
@@ -172,10 +178,12 @@
         selectable: true,
         editable: true,
         events: agendaEvents,
-        slotMinTime: '',
-        slotMaxTime: '',
+        slotMinTime: workMin,
+        slotMaxTime: workMax,
         height: 'auto',
         allDaySlot: false,
+        hiddenDays: hideDays,
+        businessHours: workSpec,
         select: (arg) => {
     
           document.getElementById('start').value = formatDate(arg.start);
@@ -574,8 +582,23 @@
               type: "CONSOLE USER",
               data: userInfos
             });
-            calendarOptions.slotMinTime = formatDateForGetHour(userInfos.startTime);
-            calendarOptions.slotMaxTime = formatDateForGetHour(userInfos.endTime);
+            
+            for(var i = 0; i < res.workDays.length; i++){
+              workSpec.push(res.workDays[i]);
+            }
+
+            workMin = workSpec.map(item => item.startTime).sort().shift()
+            workMax = workSpec.map(item => item.endTime).sort().pop()
+            workDays = [...new Set(workSpec.flatMap(item => item.daysOfWeek))]
+            hideDays = [...Array(7).keys()].filter(day => !workDays.includes(day))
+
+            calendarOptions = {...calendarOptions, slotMinTime: workMin, 
+                                                   slotMaxTime: workMax,
+                                                   hiddenDays: hideDays,
+                                                   businessHours: workSpec
+                                                  };
+
+            console.log(workSpec)
             callAppointments();
         }
         xhr.setRequestHeader("Content-Type", "application/json");    
