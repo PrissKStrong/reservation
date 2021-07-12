@@ -18,7 +18,9 @@
 		{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
 	</div>
 
-	<button type="submit" class="btn btn-success">Ajouter</button>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-success">Ajouter</button>
+	</div>
 
 	<div class="row mt-5 ml-1">
 		<h2>Vos catégories</h2>
@@ -62,7 +64,17 @@
 		{{ form_row(addPresta.category, {'attr': {'class': 'form-control'}}) }}
 	</div>
 
-	<button type="submit" class="btn btn-success">Ajouter</button>
+	<div class="btn btn-outline btn-primary mt-5 mb-5" id="addBreakTimeBtn">Ajouter un temps de pause</div>
+
+	<div id="breaktime" style="display:none;" class="form-group">
+		<label>Temps de pause en minutes</label>
+		<input type="number" class="form-control">
+	</div>
+
+	<br>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-success">Ajouter</button>
+	</div>
 
 	<div class="row mt-5 ml-1">
 		<h2>Vos prestations</h2>
@@ -92,3 +104,14 @@
 	{{ form_end(addPresta) }}
 
 {% endblock %}
+
+{% block javascripts %}
+
+	<script>
+		document.getElementById('addBreakTimeBtn').addEventListener('click', function() {
+			document.getElementById('breaktime').style = "display:block;";
+			document.getElementById('addBreakTimeBtn').style = "display:none;";
+		})
+	</script>
+
+{% endblock javascripts %}
