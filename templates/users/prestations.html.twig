@@ -18,7 +18,9 @@
 		{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
 	</div>
 
-	<button type="submit" class="btn btn-success">Ajouter</button>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-success">Ajouter</button>
+	</div>
 
 	<div class="row mt-5 ml-1">
 		<h2>Vos catégories</h2>
@@ -61,8 +63,27 @@
 	<div class="form-group">
 		{{ form_row(addPresta.category, {'attr': {'class': 'form-control'}}) }}
 	</div>
+	<br>
+	<div class="form-group">
+		{{ form_row(addPresta.breakTime, {'attr': {'class': 'form-control'}}) }}
+	</div>
 
-	<button type="submit" class="btn btn-success">Ajouter</button>
+	<br>
+	<div id="breaktime">
+		<select name="select">
+			<option value="">--Merci de renseigner le temps de pause--</option>
+			<option value="">30 min</option>
+			<option value="">45 min</option>
+			<option value="">60 min</option>
+			<option value="">90 min</option>
+			<option value="">120 min</option>
+		</select>
+	</div>
+
+	<br>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-success">Ajouter</button>
+	</div>
 
 	<div class="row mt-5 ml-1">
 		<h2>Vos prestations</h2>
