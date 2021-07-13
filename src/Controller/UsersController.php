@@ -39,10 +39,10 @@ class UsersController extends AbstractController
             $form = $this->createForm(AddUserInfosType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-    
+
                 $workingWeek = array();
 
-                if($request->get('lundiCheck') === "on"){
+                if ($request->get('lundiCheck') === "on") {
                     $lundi = array(
                         'daysOfWeek' => [1],
                         'startTime' => $request->get('lundiStart'),
@@ -51,7 +51,7 @@ class UsersController extends AbstractController
                     $workingWeek[] = $lundi;
                 }
 
-                if($request->get('mardiCheck') === "on"){
+                if ($request->get('mardiCheck') === "on") {
                     $mardi = array(
                         'daysOfWeek' => [2],
                         'startTime' => $request->get('mardiStart'),
@@ -60,7 +60,7 @@ class UsersController extends AbstractController
                     $workingWeek[] = $mardi;
                 }
 
-                if($request->get('mercrediCheck') === "on"){
+                if ($request->get('mercrediCheck') === "on") {
                     $mercredi = array(
                         'daysOfWeek' => [3],
                         'startTime' => $request->get('mercrediStart'),
@@ -69,7 +69,7 @@ class UsersController extends AbstractController
                     $workingWeek[] = $mercredi;
                 }
 
-                if($request->get('jeudiCheck') === "on"){
+                if ($request->get('jeudiCheck') === "on") {
                     $jeudi = array(
                         'daysOfWeek' => [4],
                         'startTime' => $request->get('jeudiStart'),
@@ -78,7 +78,7 @@ class UsersController extends AbstractController
                     $workingWeek[] = $jeudi;
                 }
 
-                if($request->get('vendrediCheck') === "on"){
+                if ($request->get('vendrediCheck') === "on") {
                     $vendredi = array(
                         'daysOfWeek' => [5],
                         'startTime' => $request->get('vendrediStart'),
@@ -87,7 +87,7 @@ class UsersController extends AbstractController
                     $workingWeek[] = $vendredi;
                 }
 
-                if($request->get('samediCheck') === "on"){
+                if ($request->get('samediCheck') === "on") {
                     $samedi = array(
                         'daysOfWeek' => [6],
                         'startTime' => $request->get('samediStart'),
@@ -96,7 +96,7 @@ class UsersController extends AbstractController
                     $workingWeek[] = $samedi;
                 }
 
-                if($request->get('dimancheCheck') === "on"){
+                if ($request->get('dimancheCheck') === "on") {
                     $dimanche = array(
                         'daysOfWeek' => [7],
                         'startTime' => $request->get('dimancheStart'),
@@ -125,7 +125,8 @@ class UsersController extends AbstractController
     /**
      * @Route("/Agenda/{id}", name="agenda")
      */
-    public function Agenda($id, AppointmentsRepository $appointmentsRepository){
+    public function Agenda($id, AppointmentsRepository $appointmentsRepository)
+    {
 
 
         if ($id === strval($this->getUser()->getId())) {
@@ -159,6 +160,7 @@ class UsersController extends AbstractController
             $form2->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+
                 $presta->setUsers($user);
                 $manager->persist($presta);
                 $manager->flush();
@@ -210,7 +212,7 @@ class UsersController extends AbstractController
             'addCategory' => $form->createView(),
             'category' =>  $category,
             'form' => $form->createView(),
-            
+
         ]);
     }
 
