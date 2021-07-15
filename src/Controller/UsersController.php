@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 
@@ -164,69 +163,25 @@ class UsersController extends AbstractController
             $form2->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                
+
                 $presta->setUsers($user);
+
                 $manager->persist($presta);
                 $manager->flush();
 
-                $imagePresta = $form->get('image')->getData();
-
-                if ($imagePresta) {
-
-                    $newFilename = 'presta'.$presta->getId().'.jpeg';
-
-                    // Move the file to the directory where brochures are stored
-
-                    try {
-
-                        $imagePresta->move(
-
-                            $this->getParameter('uploads_images'),
-
-                            $newFilename
-
-                        );
-                    } catch (FileException $e) {
-
-                        // ... handl
-
-                    }
-
-                }
                 return $this->redirectToRoute('prestations', [
                     'id' => $id
                 ]);
             }
 
             if ($form2->isSubmitted() && $form2->isValid()) {
+
                 $category->setUsers($user);
+
                 $manager->persist($category);
                 $manager->flush();
 
-                $imageCat = $form->get('image')->getData();
 
-                if ($imageCat) {
-
-                    $newFilename = 'presta'.$category->getId().'.jpeg';
-
-                    // Move the file to the directory where brochures are stored
-
-                    try {
-
-                        $imageCat->move(
-
-                            $this->getParameter('uploads_images'),
-
-                            $newFilename
-
-                        );
-                    } catch (FileException $e) {
-
-                        // ... handl
-
-                    }
-
-                }
                 return $this->redirectToRoute('prestations', [
                     'id' => $id
                 ]);
