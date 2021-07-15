@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\Users;
 use App\Entity\Categories;
 use App\Entity\Prestations;
 use App\Form\AddCategoryType;
 use App\Form\AddUserInfosType;
-use App\Repository\AppointmentsRepository;
 use App\Form\AddPrestationType;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AppointmentsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UsersController extends AbstractController
 {
@@ -159,6 +161,34 @@ class UsersController extends AbstractController
             $form2->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+       
+                if($request->files->get('add_prestation')['image']){
+
+                    $file = $request->files->get('add_prestation')['image'];
+                    $directory = $this->getParameter('uploads_directory');
+                    $fileName= md5(uniqid()) . '.' .$file->guessExtension();
+
+                    try{
+
+                        $file->move(
+                            $directory,
+                            $fileName
+                        );
+                        $presta->setImage($fileName);
+
+                    }catch(FileException $e){
+                        
+                        throw new Exception($e);
+
+                    }
+                    
+                }else{
+
+                    throw new Exception('Bad request');
+                    
+                }
+                
+
                 $presta->setUsers($user);
                 $manager->persist($presta);
                 $manager->flush();

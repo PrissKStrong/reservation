@@ -190,6 +190,13 @@
         allDaySlot: false,
         hiddenDays: hideDays,
         businessHours: workSpec,
+        eventDidMount: function (info) {
+          $(info.el).tooltip({
+              title: info.event.extendedProps.description || info.event.title+' | '+  info.event.extendedProps.prestation || info.event.title,
+              container: 'body',
+              delay: { "show": 50, "hide": 50 }
+          });
+        },
         select: (arg) => {
     
           document.getElementById('start').value = formatDate(arg.start);
@@ -203,6 +210,15 @@
           var breakTimeMinutes = 0;
           var prestaTime2 = 0;
           var eventColor = "";
+          var uniqGroupId
+
+          let id = () => {
+            return Math.floor((1 + Math.random()) * 0x10000000000)
+                .toString(16)
+                .substring(1);
+          }
+          uniqGroupId = id();
+          
 
           for(var i = 0; i < prestations.length; i++){
             if(prestations[i].id === parseInt(document.getElementById('selectPresta').value)){
@@ -257,6 +273,7 @@
                 tel: document.getElementById('tel').value,
                 start: document.getElementById('start').value,
                 end: document.getElementById('end').value,
+                groupeId : parseInt(uniqGroupId),
                 prestation: "/api/prestations/"+document.getElementById('selectPresta').value,
                 users: "/api/users/"+userId
               }
@@ -267,24 +284,12 @@
                 title: formulaire.firstname+' '+formulaire.lastname,
                 start: formulaire.start,
                 end: formulaire.end,
+                groupId : uniqGroupId,
                 description: document.getElementById('selectPresta').value,
                 backgroundColor: getEventBackgroundColor(eventColor),
                 borderColor: getEventBackgroundColor(eventColor)
               })
-              myModal.hide();
-
-              
-              setTimeout(() => {
-
-                document.getElementById('firstname').value = ""
-                document.getElementById('lastname').value = ""
-                document.getElementById('email').value = ""
-                document.getElementById('tel').value = ""
-                document.getElementById('start').value = ""
-                document.getElementById('end').value = ""
-                
-                
-              }, 100)
+       
 
               var xhr = new XMLHttpRequest();
               xhr.open('POST', '/api/appointments');
@@ -296,11 +301,13 @@
                     }
                   }   
                   console.log(agendaEvents);
-                  calendarOptions = {...calendarOptions, events: agendaEvents};
-                  console.log(calendarOptions)
-                  document.querySelector('#calendar').innerHTML = "";
-                  showCalendar();
 
+                  if(breaktime === false){
+                    calendarOptions = {...calendarOptions, events: agendaEvents};
+                    console.log(calendarOptions)
+                    document.querySelector('#calendar').innerHTML = "";
+                    showCalendar();
+                  }
                   setTimeout(() => {
                     x = 0;
                   }, 1000)
@@ -308,6 +315,80 @@
               }
               xhr.setRequestHeader("Content-Type", "application/json");    
               xhr.send(JSON.stringify(formulaire));
+
+              if(breaktime === true){
+                console.log(new Date(document.getElementById('start').value))
+                console.log(new Date(document.getElementById('end').value))
+
+                var newStart = new Date(document.getElementById('end').value);
+                newStart.setMinutes(newStart.getMinutes() + breakTimeMinutes);
+                newStart.setHours(newStart.getHours());
+                console.log(newStart);
+
+                var newEnd = new Date(newStart);
+                newEnd.setMinutes(newEnd.getMinutes() + prestaTime2);
+                console.log(prestaTime2)
+                console.log(newEnd);
+               
+
+                var formulaire2 = {
+                  firstname: document.getElementById('firstname').value,
+                  lastname: document.getElementById('lastname').value,
+                  email: document.getElementById('email').value,
+                  tel: document.getElementById('tel').value,
+                  start: newStart,
+                  end: newEnd,
+                  groupeId : parseInt(uniqGroupId),
+                  prestation: "/api/prestations/"+document.getElementById('selectPresta').value,
+                  users: "/api/users/"+userId
+                }
+                console.log(formulaire)
+  
+                agendaEvents.push({
+                  id: -2,
+                  title: formulaire2.firstname+' '+formulaire2.lastname,
+                  start: formulaire2.start,
+                  end: formulaire2.end,
+                  groupId : uniqGroupId,
+                  description: document.getElementById('selectPresta').value,
+                  backgroundColor: getEventBackgroundColor(eventColor),
+                  borderColor: getEventBackgroundColor(eventColor)
+                })
+         
+  
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/api/appointments');
+                xhr.onload = () => {
+                    const res = JSON.parse(xhr.response);     
+                    for(var i = 0; i < agendaEvents.length; i++){
+                      if(agendaEvents[i].id === -2){
+                        agendaEvents[i].id = res.id
+                      }
+                    }   
+                    console.log(agendaEvents);
+                    calendarOptions = {...calendarOptions, events: agendaEvents};
+                    console.log(calendarOptions)
+                    document.querySelector('#calendar').innerHTML = "";
+                    showCalendar();
+                    
+                }
+                xhr.setRequestHeader("Content-Type", "application/json");    
+                xhr.send(JSON.stringify(formulaire2));
+              }
+
+              myModal.hide();
+             
+              setTimeout(() => {
+
+                document.getElementById('firstname').value = ""
+                document.getElementById('lastname').value = ""
+                document.getElementById('email').value = ""
+                document.getElementById('tel').value = ""
+                document.getElementById('start').value = ""
+                document.getElementById('end').value = ""
+                
+                
+              }, 100)
             }
           })  
           
@@ -389,7 +470,7 @@
                       agendaEvents[i].title = firstname.value+' '+lastname.value;
                       agendaEvents[i].start = newStart.toISOString();
                       agendaEvents[i].end = newEnd.toISOString();
-                      agendaEvents[i].groupId = document.getElementById('selectPrestaEdit').value;
+                     // agendaEvents[i].groupId = document.getElementById('selectPrestaEdit').value;
                       agendaEvents[i].backgroundColor = getEventBackgroundColor(eventColorUp);
                       agendaEvents[i].borderColor = getEventBackgroundColor(eventColorUp);
                     }
@@ -579,7 +660,10 @@
                     start: new Date(rdv.start).toISOString(),
                     end: new Date(rdv.end).toISOString(),
                     id: rdv.id,
-                    groupId: rdv.prestation.id,
+                    groupId: rdv.groupeId,
+                    description: rdv.note,
+                    prestation: rdv.prestation.name,
+                    prestationId: rdv.prestation.id,
                     backgroundColor: getEventBackgroundColor(rdv.prestation.agendaColor),
                     borderColor: getEventBackgroundColor(rdv.prestation.agendaColor)
                 })

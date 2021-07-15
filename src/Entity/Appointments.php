@@ -87,11 +87,13 @@ class Appointments
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"read:appointments"})
      */
     private $note;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read:appointments"})
      */
     private $groupeId;
 

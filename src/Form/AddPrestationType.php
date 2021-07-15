@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class AddPrestationType extends AbstractType
 {
@@ -36,8 +37,9 @@ class AddPrestationType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom de la prestation'
             ])
-            ->add('image', TextType::class, [
-                'label' => 'Insérez votre image'
+            ->add('image', FileType::class, [
+                'label' => 'Insérez votre image',
+                'mapped' => false
             ])
             ->add('prestaTime', NumberType::class, [
                 'label' => 'Durée en minutes'
