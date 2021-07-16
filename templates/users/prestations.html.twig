@@ -16,6 +16,11 @@
 
 	<div class="form-group">
 		{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
+		<p>
+			<i id="nameFileCategory">
+
+			</i>
+		</p>
 	</div>
 
 	<div class="mb-3">
@@ -31,7 +36,7 @@
 		{% for c in category %}
 			<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
 				<div class="card">
-					<img class="card-img-top" src="{{ c.image }}" alt="Card image cap">
+					<img class="card-img-top" src="{{ asset('images/'~c.image) }}" alt="Card image cap">
 					<div class="card-body">
 						Catégorie:<h5 class="card-title">{{ c.name }}</h5>
 						<a href="{{path('category_edit', { 'id': c.id })}}" class="btn btn-warning">Mise à jour</a>
@@ -130,6 +135,17 @@
 		document.getElementById('add_prestation_image').addEventListener('input', function (evt) {
 
 			document.getElementById('nameFile').innerHTML = this.value;
+			
+			var label = document.getElementsByClassName('custom-file-label');
+			for(var i = 0; i < label.length; i++){
+				label[i].style.border = '2px solid green';
+			}
+			
+		});
+
+		document.getElementById('add_category_image').addEventListener('input', function (evt) {
+
+			document.getElementById('nameFileCategory').innerHTML = this.value;
 			
 			var label = document.getElementsByClassName('custom-file-label');
 			for(var i = 0; i < label.length; i++){
