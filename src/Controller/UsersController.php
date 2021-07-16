@@ -9,6 +9,7 @@ use App\Entity\Prestations;
 use App\Form\AddCategoryType;
 use App\Form\AddUserInfosType;
 use App\Form\AddPrestationType;
+use Symfony\Component\Finder\Finder;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AppointmentsRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -274,11 +275,18 @@ class UsersController extends AbstractController
                 $fileName = md5(uniqid()) . '.' . $file->guessExtension();
 
                 try {
-
                     $file->move(
                         $directory,
                         $fileName
                     );
+
+                    $finder = new Finder();
+                    $finder->files()->in("images")->name($category->getImage());
+
+                    foreach ($finder as $files) {
+                        unlink($files->getRealPath());
+                    }
+
                     $category->setImage($fileName);
                 } catch (FileException $e) {
 
@@ -332,6 +340,13 @@ class UsersController extends AbstractController
                         $directory,
                         $fileName
                     );
+
+                    $finder = new Finder();
+                    $finder->files()->in("images")->name($presta->getImage());
+
+                    foreach ($finder as $files) {
+                        unlink($files->getRealPath());
+                    }
                     $presta->setImage($fileName);
                 } catch (FileException $e) {
 
@@ -345,7 +360,7 @@ class UsersController extends AbstractController
             $manager->persist($presta);
             $manager->flush();
 
-            $this->addFlash('warning', "La <prestation></prestation> a bien été modfiée!");
+            $this->addFlash('warning', "La prestation a bien été modfiée!");
 
             return $this->redirectToRoute('prestation_edit', [
                 'id' => $presta->getId()

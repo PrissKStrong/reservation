@@ -7,9 +7,7 @@
 
 {{ form_start(user) }}
 
-<div class="row mt-5 ml-1 mb-3">
-		<h2>Gérez vos informations</h2>
-	</div>
+<div class="mb-5 shadow arrondi">
 
                 <div class="form-group">
                     {{ form_row(user.timeLapse, {'attr': {'class': 'form-control'}}) }}
@@ -161,9 +159,11 @@
 
                 <input type="hidden" value="{{ userId }}" id="userId">
 
-{{ form_end(user) }}
+    
+        </div>
 
-<br>
+
+{{ form_end(user) }}
       
 {% endblock %}
 

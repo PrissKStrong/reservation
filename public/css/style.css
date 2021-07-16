@@ -33,3 +33,6 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
 .successBorder{
     border-bottom: 2px solid green;
 }
+.arrondi {
+    border-radius: 15px;
+}
