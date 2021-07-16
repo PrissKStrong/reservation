@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\Users;
 use App\Entity\Categories;
 use App\Entity\Prestations;
@@ -15,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-
-
 
 class UsersController extends AbstractController
 {
@@ -164,6 +163,29 @@ class UsersController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
 
+                if ($request->files->get('add_prestation')['image']) {
+
+                    $file = $request->files->get('add_prestation')['image'];
+                    $directory = $this->getParameter('uploads_directory');
+                    $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                    try {
+
+                        $file->move(
+                            $directory,
+                            $fileName
+                        );
+                        $presta->setImage($fileName);
+                    } catch (FileException $e) {
+
+                        throw new Exception($e);
+                    }
+                } else {
+
+                    throw new Exception('Bad request');
+                }
+
+
                 $presta->setUsers($user);
 
                 $manager->persist($presta);
@@ -176,6 +198,29 @@ class UsersController extends AbstractController
 
             if ($form2->isSubmitted() && $form2->isValid()) {
 
+                if ($request->files->get('add_category')['image']) {
+
+                    $file = $request->files->get('add_category')['image'];
+
+                    $directory = $this->getParameter('uploads_directory');
+                    $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                    try {
+
+                        $file->move(
+                            $directory,
+                            $fileName
+                        );
+                        $category->setImage($fileName);
+                    } catch (FileException $e) {
+
+                        throw new Exception($e);
+                    }
+                } else {
+
+                    throw new Exception('Bad request');
+                }
+
                 $category->setUsers($user);
 
                 $manager->persist($category);
@@ -186,6 +231,7 @@ class UsersController extends AbstractController
                     'id' => $id
                 ]);
             }
+
             return $this->render("users/prestations.html.twig", [
                 'addCategory' => $form2->createView(),
                 'category' =>  $user->getCategory(),
@@ -204,13 +250,41 @@ class UsersController extends AbstractController
     /**
      * @Route("/category/{id}", name="category_edit")
      */
-    public function editCategory(Request $request, Categories $category): Response
+    public function editCategory(Request $request, Categories $category, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(AddCategoryType::class, $category);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->getDoctrine()->getManager()->flush();
+
+            if ($request->files->get('add_category')['image']) {
+
+                $file = $request->files->get('add_category')['image'];
+
+                $directory = $this->getParameter('uploads_directory');
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                try {
+
+                    $file->move(
+                        $directory,
+                        $fileName
+                    );
+                    $category->setImage($fileName);
+                } catch (FileException $e) {
+
+                    throw new Exception($e);
+                }
+            } else {
+
+                throw new Exception('Bad request');
+            }
+
+            $manager->persist($category);
+            $manager->flush();
 
             return $this->redirectToRoute('category_edit', [
                 'id' => $category->getId()
@@ -228,13 +302,40 @@ class UsersController extends AbstractController
     /**
      * @Route("/prestation/{id}", name="prestation_edit")
      */
-    public function editPrestation(Request $request, Prestations $presta): Response
+    public function editPrestation(Request $request, Prestations $presta, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(AddPrestationType::class, $presta);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->getDoctrine()->getManager()->flush();
+
+            if ($request->files->get('add_prestation')['image']) {
+
+                $file = $request->files->get('add_prestation')['image'];
+
+                $directory = $this->getParameter('uploads_directory');
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+
+                try {
+
+                    $file->move(
+                        $directory,
+                        $fileName
+                    );
+                    $presta->setImage($fileName);
+                } catch (FileException $e) {
+
+                    throw new Exception($e);
+                }
+            } else {
+
+                throw new Exception('Bad request');
+            }
+
+            $manager->persist($presta);
+            $manager->flush();
 
             return $this->redirectToRoute('prestation_edit', [
                 'id' => $presta->getId()

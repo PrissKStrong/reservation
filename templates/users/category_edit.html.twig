@@ -36,6 +36,11 @@
 
 	<div class="form-group">
 		{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
+		<p>
+			<i id="nameFileCat">
+
+			</i>
+		</p>
 	</div>
 
 	<div class="mb-3">
@@ -46,3 +51,21 @@
 	{{ form_end(addCategory) }}
 
 {% endblock %}
+
+
+	{% block javascripts %}
+
+	<script>
+
+	document.getElementById('add_category_image').addEventListener('input', function (evt) {
+
+			document.getElementById('nameFileCat').innerHTML = this.value;
+			
+			var label = document.getElementsByClassName('custom-file-label');
+			for(var i = 0; i < label.length; i++){
+				label[i].style.border = '2px solid green';
+			}
+			
+		});
+	</script>
+	{% endblock javascripts %}

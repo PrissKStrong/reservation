@@ -10,11 +10,11 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class AddPrestationType extends AbstractType
 {
@@ -40,7 +40,7 @@ class AddPrestationType extends AbstractType
             ->add('image', FileType::class, [
                 'label' => 'Insérez votre image',
                 'mapped' => false
-                ])
+            ])
             ->add('prestaTime', NumberType::class, [
                 'label' => 'Durée en minutes'
             ])
