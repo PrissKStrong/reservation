@@ -112,6 +112,9 @@ class UsersController extends AbstractController
 
                 $manager->persist($user);
                 $manager->flush();
+
+                $this->addFlash('success', "Vos informations sont à jour!");
+
                 return $this->redirectToRoute('home');
             }
             return $this->render("users/infos.html.twig", [
@@ -192,6 +195,8 @@ class UsersController extends AbstractController
                 $manager->persist($presta);
                 $manager->flush();
 
+                $this->addFlash('success', "La prestation a bien été ajoutée!");
+
                 return $this->redirectToRoute('prestations', [
                     'id' => $id
                 ]);
@@ -227,6 +232,7 @@ class UsersController extends AbstractController
                 $manager->persist($category);
                 $manager->flush();
 
+                $this->addFlash('success', "La catégorie a bien été ajoutée!");
 
                 return $this->redirectToRoute('prestations', [
                     'id' => $id
@@ -255,7 +261,7 @@ class UsersController extends AbstractController
     {
         $form = $this->createForm(AddCategoryType::class, $category);
         $form->handleRequest($request);
-        
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -280,15 +286,12 @@ class UsersController extends AbstractController
                     foreach ($finder as $files) {
                         unlink($files->getRealPath());
                     }
-                    
-                    $category->setImage($fileName);
 
+                    $category->setImage($fileName);
                 } catch (FileException $e) {
 
                     throw new Exception($e);
-
                 }
-
             } else {
 
                 throw new Exception('Bad request');
@@ -296,6 +299,8 @@ class UsersController extends AbstractController
 
             $manager->persist($category);
             $manager->flush();
+
+            $this->addFlash('warning', "La catégorie a bien été modfiée!");
 
             return $this->redirectToRoute('category_edit', [
                 'id' => $category->getId()
@@ -334,6 +339,13 @@ class UsersController extends AbstractController
                         $directory,
                         $fileName
                     );
+
+                    $finder = new Finder();
+                    $finder->files()->in("images")->name($presta->getImage());
+
+                    foreach ($finder as $files) {
+                        unlink($files->getRealPath());
+                    }
                     $presta->setImage($fileName);
                 } catch (FileException $e) {
 
@@ -346,6 +358,8 @@ class UsersController extends AbstractController
 
             $manager->persist($presta);
             $manager->flush();
+
+            $this->addFlash('warning', "La prestation a bien été modfiée!");
 
             return $this->redirectToRoute('prestation_edit', [
                 'id' => $presta->getId()
