@@ -5,9 +5,11 @@
 
 {% block body %}
 	{{ form_start(addPresta) }}
+	<br>
+	<br>
 	<div class="container">
-		<div class="mb-5 shadow arrondi">
-			<div class="row mt-5 ml-1 mb-3">
+		<div class="mb-5 p-5 shadow arrondi bg-light">
+			<div class="row mt-3 ml-3 mb-4">
 				<h2>Modifier la prestation</h2>
 			</div>
 			<div class="row col-12">
@@ -28,29 +30,35 @@
 				</div>
 
 				<div class="col-6">
-					{{ form_row(addPresta.prestaTime, {'attr': {'class': 'form-control'}}) }}
+					{{ form_row(addPresta.agendaColor, {'attr': {'class': 'form-control'}}) }}
 				</div>
+
 			</div>
 
 			<div class="row col-12">
+
 				<div class="col-6">
-					{{ form_row(addPresta.agendaColor, {'attr': {'class': 'form-control'}}) }}
+					{{ form_row(addPresta.prestaTime, {'attr': {'class': 'form-control'}}) }}
 				</div>
+
 				<div class="col-6">
+					<br>
+
 					<div class="btn btn-outline btn-primary mb-3" id="addBreakTimeBtn">Ajouter un temps de pause</div>
 				</div>
-				<div id="breaktime" style="display:none;" class="col-7">
+
+				<div id="breaktime" style="display:none;" class="col-6">
 					{{ form_row(addPresta.breakTime, {'attr': {'class': 'form-control'}}) }}
 				</div>
 
-				<div id="prestaTime2" style="display:none;" class="col-7">
+				<div id="prestaTime2" style="display:none;" class="col-6">
 					{{ form_row(addPresta.prestaTime2, {'attr': {'class': 'form-control'}}) }}
 				</div>
+
 			</div>
-			<br>
 
 			<div class="col-3 mb-3">
-				<button type="submit" class="btn btn-success">Ajouter</button>
+				<button type="submit" class="btn btn-dark">Modifier</button>
 			</div>
 			<br>
 		</div>
@@ -69,7 +77,7 @@ document.getElementById('addBreakTimeBtn').style = "display:none;";
 })
 
 
-		document.getElementById('add_prestation_image').addEventListener('input', function (evt) {
+document.getElementById('add_prestation_image').addEventListener('input', function (evt) {
 
 document.getElementById('nameFile').innerHTML = this.value;
 

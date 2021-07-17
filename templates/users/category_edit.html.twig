@@ -4,26 +4,29 @@
 {% endblock %}
 
 {% block body %}
-
+<br>
+<br>
 	<div class="container">
-		<div class="mb-5 shadow">
-			{{ form_start(addCategory) }}
-			<div class="row mt-5 ml-1 mb-3">
+		{{ form_start(addCategory) }}
+		<div class="mb-5 p-5 shadow arrondi bg-light">
+			<div class="row mt-3 ml-3 mb-4">
 				<h2>Modifier la catégorie</h2>
 			</div>
-			<div class="col-6">
-				{{ form_row(addCategory.name, {'attr': {'class': 'form-control'}}) }}
-			</div>
+			<div class="row col-12">
+				<div class="col-6">
+					{{ form_row(addCategory.name, {'attr': {'class': 'form-control'}}) }}
+				</div>
 
-			<div class="col-6">
-				{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
-				<p>
-					<i id="nameFileCategory"></i>
-				</p>
+				<div class="col-6">
+					{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
+					<p>
+						<i id="nameFileCat"></i>
+					</p>
+				</div>
 			</div>
 
 			<div class="col-3 mb-3">
-				<button type="submit" class="btn btn-success">Ajouter</button>
+				<button type="submit" class="btn btn-dark">Modifier</button>
 			</div>
 			<br>
 			{{ form_end(addCategory) }}
@@ -33,19 +36,19 @@
 {% endblock %}
 
 
-	{% block javascripts %}
+{% block javascripts %}
 
 	<script>
 
-	document.getElementById('add_category_image').addEventListener('input', function (evt) {
+		document.getElementById('add_category_image').addEventListener('input', function (evt) {
 
-			document.getElementById('nameFileCat').innerHTML = this.value;
-			
-			var label = document.getElementsByClassName('custom-file-label');
-			for(var i = 0; i < label.length; i++){
-				label[i].style.border = '2px solid green';
-			}
-			
-		});
+document.getElementById('nameFileCat').innerHTML = this.value;
+
+var label = document.getElementsByClassName('custom-file-label');
+for (var i = 0; i < label.length; i++) {
+label[i].style.border = '2px solid green';
+}
+
+});
 	</script>
-	{% endblock javascripts %}
+{% endblock javascripts %}

@@ -4,26 +4,29 @@
 {% endblock %}
 
 {% block body %}
-
+<br>
+<br>
 	<div class="container">
-		<div class="mb-5 shadow arrondi">
 			{{ form_start(addCategory) }}
-			<div class="row mt-5 ml-1 mb-3">
-				<h2>Ajoutez une nouvelle catégorie</h2>
+			<div class="mb-5 p-5 shadow arrondi bg-light">
+			<div class="row mt-3 ml-3 mb-4">
+				<h2>Ajoutez une catégorie</h2>
 			</div>
-			<div class="col-6">
-				{{ form_row(addCategory.name, {'attr': {'class': 'form-control'}}) }}
-			</div>
+			<div class="row col-12">
+				<div class="col-6">
+					{{ form_row(addCategory.name, {'attr': {'class': 'form-control'}}) }}
+				</div>
 
-			<div class="col-6">
-				{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
-				<p>
-					<i id="nameFileCategory"></i>
-				</p>
+				<div class="col-6">
+					{{ form_row(addCategory.image, {'attr': {'class': 'form-control'}}) }}
+					<p>
+						<i id="nameFileCategory"></i>
+					</p>
+				</div>
 			</div>
 
 			<div class="col-3 mb-3">
-				<button type="submit" class="btn btn-success">Ajouter</button>
+				<button type="submit" class="btn btn-dark">Ajouter</button>
 			</div>
 			<br>
 			{{ form_end(addCategory) }}
@@ -31,7 +34,7 @@
 	</div>
 
 
-	<div class="row mt-5 ml-1">
+	<div class="row ml-3">
 		<h2>Vos catégories</h2>
 	</div>
 
@@ -39,10 +42,11 @@
 
 		{% for c in category %}
 			<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
-				<div class="card">
-					<img class="card-img-top" src="{{ asset('images/'~c.image) }}" alt="Card image cap">
+				<div class="card arrondi">
 					<div class="card-body">
-						Catégorie:<h5 class="card-title">{{ c.name }}</h5>
+						<h5 class="card-title">{{ c.name }}</h5>
+						<img class="card-img-top" src="{{ asset('images/'~c.image) }}" width="150" height="150" alt="Card image cap">
+						<br><br>	
 						<a href="{{path('category_edit', { 'id': c.id })}}" class="btn btn-warning">Mise à jour</a>
 					</div>
 				</div>
@@ -51,11 +55,10 @@
 	</div>
 
 	<div class="container">
-		<div class="mb-5 shadow arrondi">
-
 			{{ form_start(addPresta) }}
-			<div class="row mt-5 ml-1 mb-3">
-				<h2>Ajoutez une nouvelle prestation</h2>
+			<div class="mb-5 p-5 shadow arrondi bg-light">
+			<div class="row mt-3 ml-3 mb-4">
+				<h2>Ajoutez une prestation</h2>
 			</div>
 			<div class="row col-12">
 				<div class="col-6">
@@ -75,36 +78,38 @@
 				</div>
 
 				<div class="col-6">
-					{{ form_row(addPresta.prestaTime, {'attr': {'class': 'form-control'}}) }}
+					{{ form_row(addPresta.agendaColor, {'attr': {'class': 'form-control'}}) }}
 				</div>
+
 			</div>
 
 			<div class="row col-12">
+
 				<div class="col-6">
-					{{ form_row(addPresta.agendaColor, {'attr': {'class': 'form-control'}}) }}
+					{{ form_row(addPresta.prestaTime, {'attr': {'class': 'form-control'}}) }}
 				</div>
+
 				<div class="col-6">
+				<br>
 					<div class="btn btn-outline btn-primary mb-3" id="addBreakTimeBtn">Ajouter un temps de pause</div>
 				</div>
-			
-					<div id="breaktime" style="display:none;" class="col-6">
-						{{ form_row(addPresta.breakTime, {'attr': {'class': 'form-control'}}) }}
-					</div>
 
-					<div id="prestaTime2" style="display:none;" class="col-6">
-						{{ form_row(addPresta.prestaTime2, {'attr': {'class': 'form-control'}}) }}
-					</div>
-			
+				<div id="breaktime" style="display:none;" class="col-6">
+					{{ form_row(addPresta.breakTime, {'attr': {'class': 'form-control'}}) }}
+				</div>
+
+				<div id="prestaTime2" style="display:none;" class="col-6">
+					{{ form_row(addPresta.prestaTime2, {'attr': {'class': 'form-control'}}) }}
+				</div>
+
 			</div>
-			<br>
 
 			<div class="col-3 mb-3">
-				<button type="submit" class="btn btn-success">Ajouter</button>
+				<button type="submit" class="btn btn-dark">Ajouter</button>
 			</div>
-			<br>
 		</div>
 	</div>
-	<div class="row mt-5 ml-1">
+	<div class="row ml-3">
 		<h2>Vos prestations</h2>
 	</div>
 
@@ -112,14 +117,14 @@
 
 		{% for p in presta %}
 			<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
-				<div class="card">
-					<img class="card-img-top" src="{{ asset('images/'~p.image) }}" alt="Card image cap">
+				<div class="card arrondi">
 					<div class="card-body">
-						<h5 class="card-title">{{ p.name }}</h5>
-						<p class="card-text">Durée de la prestation en minutes:
-							{{ p.prestaTime }}</p>
+						<h5 class="card-title ">{{ p.name }}</h5>
+						<img class="card-img-top" src="{{ asset('images/'~p.image) }}" width="150" height="150" alt="Card image cap">
+						<p class="card-text">
+							{{ p.prestaTime }} min</p>
 						{% if p.category %}
-							<p class="card-text">Catégorie:
+							<p class="card-text">
 								{{ p.category.name }}</p>
 						{% endif %}
 						<a href="{{path('prestation_edit', { 'id': p.id })}}" class="btn btn-warning">Mise à jour</a>
