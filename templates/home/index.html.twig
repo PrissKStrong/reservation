@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-<h1>Home</h1>
+<div class="description row justify-content-center align-items-center py-5">
+    <img src="{{ asset('logo/logoAppSingle.png') }}" alt="" class="mb-3">
+    <h4 class="text-center">La solution de prise de rendez-vous qui s'adapte le plus facilement possible à votre profession ainsi qu'à votre entreprise.</h4>
+</div>
 {% endblock %}
