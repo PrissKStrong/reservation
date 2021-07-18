@@ -25,7 +25,7 @@
 		<meta name="msapplication-TileImage" content="{{asset('logo/ms-icon-144x144.png')}}">
 		<meta name="theme-color" content="#ffffff">
 
-		<title>R&Clic -
+		<title>R & Clic -
 			{% block title %}{% endblock %}
 		</title>
 
@@ -36,9 +36,11 @@
 
 			{% include "partials/header.html.twig" %}
 
-			<div class="container"> {% block body %}{% endblock %}
+			<div class="container-fluid"> 
+				
+				{% block body %}{% endblock %}
 
-				</div>
+			</div>
 
 				{% include "partials/footer.html.twig" %}
 
