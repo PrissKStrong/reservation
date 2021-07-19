@@ -1,6 +1,4 @@
-body {
-    background-color: #043349;
-}
+
 li.nav-item{
     align-items: center !important;
     justify-content: center !important;
@@ -18,13 +16,13 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
 .close{
     height: 0px;
     overflow: hidden;
-    transition: 0.2s ease-in-out;
+    transition: 0.1s ease-in-out;
 }
 .open{
     height: 200px !important;
     padding: 10px !important;
     padding-bottom: 20px !important;
-    transition: 0.2s ease-in-out;
+    transition: 0.1s ease-in-out;
 }
 .fontOne{
     font-size: 1rem !important;
@@ -38,4 +36,85 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light{
 }
 .arrondi {
     border-radius: 15px;
+}
+#navLogo{
+    width: 200px;
+    height: 70px;
+}
+.btnTopBar{
+    font-weight: 500;
+    font-size: 1rem;
+}
+.topBar{
+    margin-right: 0 !important;
+    background:rgb(77, 77, 77); 
+}
+.nav-item {
+    margin-right: 1rem !important;
+}
+.banner{
+    background: url('../logo/banner.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 300px;
+    max-width: 100%;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.shadow{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.253);
+}
+.description{
+    min-height: 200px;
+}
+.description > img {
+    width: 100px;
+    height: 100px;
+}
+.description > h4 {
+    color: rgb(77, 77, 77);
+    font-weight: 500;
+}
+.plusValue{
+    min-height: 250px;
+    background: rgb(77, 77, 77);
+}
+.goldIcon{
+    color: rgb(193, 147, 50);
+    font-size: 3rem;
+}
+.exemples{
+    min-height: 400px;
+}
+.imgCard{
+    width: 100%;
+    height: 250px;
+}
+.exempleLogoPart{
+    width: 50px;
+    height: 50px;
+}
+.size-12{
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+.text-gold{
+    font-weight: 800;
+    color: rgb(193, 147, 50);
+}
+.bg-white{
+    background: white !important;
+}
+.card{
+    border: none !important;
+}
+.solutionTest{
+    min-height: 500px;
+    background: rgb(77, 77, 77);
+}
+.discoverBtn{
+    background: rgb(77, 77, 77);
 }

@@ -1,7 +1,18 @@
 <header>
+	{% if not app.user %}
+		<div class="row justify-content-end align-items-center topBar">
+			<p class="text-light mb-0 mr-3">
+				Appelez-nous au 
+				<a href="tel:+33767535224" style="color:rgb(193, 147, 50);">+33 (0)7 67 53 52 24</a>
+			</p>
+
+			<button class="btn btn-warning btnTopBar">Être rappelé</button>
+			<button class="btn btn-success btnTopBar"><a class="text-light" style="text-decoration: none;" href="{{ path('app_login') }}">Connexion</a></button>
+		</div>
+	{% endif %}
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<img src="{{asset("images/webanteklogo.jpeg")}}" height="100" width="100" alt="logo">
+		<a class="navbar-brand ml-3" href="{{ path('home') }}"><img src="{{asset('logo/logoAppTransparent.png')}}" alt="" id="navLogo"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -16,11 +27,23 @@
 					<a class="nav-link" href="#">Prise de rdv</a>
 				</li>
 				{% if not app.user %}
+					{# <li class="nav-item">
+						<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+					</li> #}
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+						<a class="nav-link" href="{{ path('app_register') }}">Solution</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+						<a class="nav-link" href="{{ path('app_register') }}">Outil</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_register') }}">Exemples</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_register') }}">Tarifs</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_register') }}">Contact</a>
 					</li>
 				{% endif %}
 				{% if app.user %}
@@ -40,6 +63,22 @@
 		</div>
 	</nav>
 </header>
+{% if not app.user %}
+	<div class="row banner">
+		<div class="shadow justify-content-center align-items-center  d-flex flex-column">
+			<h1 class="text-light">
+				Prise de Rendez-vous
+			</h1>
+			<h4 class="text-light">
+				Smart Agenda - 
+				Envoie de SMS -
+				Adaptable à n'importe quel site web
+			</h4>
+
+			<button class="btn btn-outline-light rounded">Voir la démo</button>
+		</div>
+	</div>
+{% endif %}
 
 {% for label,messages in app.flashes %}
 	<div class="container text-center my-5">

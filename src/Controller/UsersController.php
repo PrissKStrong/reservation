@@ -335,7 +335,6 @@ class UsersController extends AbstractController
                 $fileName = md5(uniqid()) . '.' . $file->guessExtension();
 
                 try {
-
                     $file->move(
                         $directory,
                         $fileName
