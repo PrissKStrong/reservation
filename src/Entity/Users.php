@@ -77,9 +77,24 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $subscriberUser;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $employeColor;
+
+    /**
      * @ORM\OneToMany(targetEntity=Categories::class, mappedBy="users")
      */
     private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Users::class, mappedBy="patron")
+     */
+    private $employes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="employes")
+     */
+    private $patron;
 
     /**
      * @ORM\OneToMany(targetEntity=Appointments::class, mappedBy="users")
@@ -101,6 +116,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->category = new ArrayCollection();
         $this->appointement = new ArrayCollection();
         $this->prestation = new ArrayCollection();
+        $this->employes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -362,6 +378,60 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setWorkDays(?array $workDays): self
     {
         $this->workDays = $workDays;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Users[]
+     */
+    public function getEmployes(): Collection
+    {
+        return $this->employes;
+    }
+
+    public function addEmploye(Users $employe): self
+    {
+        if (!$this->employes->contains($employe)) {
+            $this->employes[] = $employe;
+            $employe->setPatron($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmploye(Users $employe): self
+    {
+        if ($this->employes->removeElement($employe)) {
+            // set the owning side to null (unless already changed)
+            if ($employe->getPatron() === $this) {
+                $employe->setPatron(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPatron(): ?self
+    {
+        return $this->patron;
+    }
+
+    public function setPatron(?self $patron): self
+    {
+        $this->patron = $patron;
+
+        return $this;
+    }
+
+    public function getEmployeColor(): ?string
+    {
+        return $this->employeColor;
+    }
+
+    public function setEmployeColor(?string $employeColor): self
+    {
+        $this->employeColor = $employeColor;
 
         return $this;
     }

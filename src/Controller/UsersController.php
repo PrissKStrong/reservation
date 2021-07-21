@@ -7,16 +7,21 @@ use App\Entity\Users;
 use App\Entity\Categories;
 use App\Entity\Prestations;
 use App\Form\AddCategoryType;
+use App\Form\AddEmployeType;
 use App\Form\AddUserInfosType;
 use App\Form\AddPrestationType;
+use App\Form\EditEmployeType;
 use Symfony\Component\Finder\Finder;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AppointmentsRepository;
+use App\Repository\UsersRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UsersController extends AbstractController
 {
@@ -123,8 +128,7 @@ class UsersController extends AbstractController
             ]);
         } else {
 
-            return $this->render("users/infos.html.twig", [
-                'test' => 'error'
+            return $this->render("security/404.html.twig", [
             ]);
         }
     }
@@ -142,8 +146,7 @@ class UsersController extends AbstractController
             ]);
         } else {
 
-            return $this->render("users/agenda.html.twig", [
-                'test' => 'error'
+            return $this->render("security/404.html.twig", [
             ]);
         }
     }
@@ -154,10 +157,11 @@ class UsersController extends AbstractController
      */
     public function Prestations($id, Users $user, EntityManagerInterface $manager, Request $request)
     {
-        $category = new Categories();
-        $presta = new Prestations();
 
         if ($id === strval($this->getUser()->getId())) {
+
+            $category = new Categories();
+            $presta = new Prestations();
 
             $form = $this->createForm(AddPrestationType::class, $presta);
             $form2 = $this->createForm(AddCategoryType::class, $category);
@@ -241,15 +245,48 @@ class UsersController extends AbstractController
 
             return $this->render("users/prestations.html.twig", [
                 'addCategory' => $form2->createView(),
-                'category' =>  $user->getCategory(),
                 'addPresta' => $form->createView(),
-                'presta' =>  $user->getPrestation(),
                 'prestations' => $presta
             ]);
         } else {
 
             return $this->render("users/prestations.html.twig", [
                 'test' => 'error'
+            ]);
+        }
+    }
+
+
+    /**
+     * @Route("/mes-prestations/{id}", name="showPrestations")
+     */
+    public function showPrestations($id, Users $user){
+
+        if ($id === strval($this->getUser()->getId())) {
+
+            return $this->render("users/showPrestations.html.twig", [
+                'presta' =>  $user->getPrestation(),
+            ]);
+
+        }else{
+            return $this->render("security/404.html.twig", [
+            ]);
+        }
+    }
+
+    /**
+     * @Route("/mes-categories/{id}", name="showCategories")
+     */
+    public function showCategories($id, Users $user){
+
+        if ($id === strval($this->getUser()->getId())) {
+
+            return $this->render("users/showCategories.html.twig", [
+                'category' =>  $user->getCategory(),
+            ]);
+
+        }else{
+            return $this->render("security/404.html.twig", [
             ]);
         }
     }
@@ -373,5 +410,241 @@ class UsersController extends AbstractController
 
 
         ]);
+    }
+
+    /**
+     * @Route("/ajout-collaborateur/{id}", name="employes")
+     */
+    public function AddEmployes($id, Request $request, Users $user, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
+
+        if ($id === strval($this->getUser()->getId())) {
+
+            $employe = new Users();
+          
+            $form = $this->createForm(AddEmployeType::class, $employe);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $hash = $encoder->encodePassword($employe, $employe->getPassword());
+                $employe->setPassword($hash);
+
+                $employe->setRoles(['ROLE_EMPLOYE']);
+                $employe->setPatron($user);
+
+                $workingWeek = array();
+
+                if ($request->get('lundiCheck') === "on") {
+                    $lundi = array(
+                        'daysOfWeek' => [1],
+                        'startTime' => $request->get('lundiStart'),
+                        'endTime' => $request->get('lundiEnd')
+                    );
+                    $workingWeek[] = $lundi;
+                }
+
+                if ($request->get('mardiCheck') === "on") {
+                    $mardi = array(
+                        'daysOfWeek' => [2],
+                        'startTime' => $request->get('mardiStart'),
+                        'endTime' => $request->get('mardiEnd')
+                    );
+                    $workingWeek[] = $mardi;
+                }
+
+                if ($request->get('mercrediCheck') === "on") {
+                    $mercredi = array(
+                        'daysOfWeek' => [3],
+                        'startTime' => $request->get('mercrediStart'),
+                        'endTime' => $request->get('mercrediEnd')
+                    );
+                    $workingWeek[] = $mercredi;
+                }
+
+                if ($request->get('jeudiCheck') === "on") {
+                    $jeudi = array(
+                        'daysOfWeek' => [4],
+                        'startTime' => $request->get('jeudiStart'),
+                        'endTime' => $request->get('jeudiEnd')
+                    );
+                    $workingWeek[] = $jeudi;
+                }
+
+                if ($request->get('vendrediCheck') === "on") {
+                    $vendredi = array(
+                        'daysOfWeek' => [5],
+                        'startTime' => $request->get('vendrediStart'),
+                        'endTime' => $request->get('vendrediEnd')
+                    );
+                    $workingWeek[] = $vendredi;
+                }
+
+                if ($request->get('samediCheck') === "on") {
+                    $samedi = array(
+                        'daysOfWeek' => [6],
+                        'startTime' => $request->get('samediStart'),
+                        'endTime' => $request->get('samediEnd')
+                    );
+                    $workingWeek[] = $samedi;
+                }
+
+                if ($request->get('dimancheCheck') === "on") {
+                    $dimanche = array(
+                        'daysOfWeek' => [7],
+                        'startTime' => $request->get('dimancheStart'),
+                        'endTime' => $request->get('dimancheEnd')
+                    );
+                    $workingWeek[] = $dimanche;
+                }
+
+                $employe->setWorkDays($workingWeek);
+
+                $manager->persist($employe);
+                $manager->flush();
+
+                $this->addFlash('success', "Nouveau collaborateur ajouté.");
+
+                return $this->redirectToRoute('employes', [
+                    'id' => $id
+                ]);
+            }
+
+        return $this->render('users/employes.html.twig', [
+            'employeForm' => $form->createView(),
+        ]);
+
+        }else{
+            return $this->render("security/404.html.twig", [
+            ]);
+        }
+    }
+
+
+    /**
+     * @Route("/collaborateurs/{id}", name="showEmployes")
+     */
+    public function showEmploye($id, UsersRepository $userRepo, Users $user){
+
+        if ($id === strval($this->getUser()->getId())) {
+
+            $collaborateur = $userRepo->findCollaborateur($user);
+            return $this->render('users/showEmployes.html.twig', [
+                'collaborateur' => $collaborateur
+            ]);
+
+        }else{
+            return $this->render('security/404.html.twig', [
+
+            ]);
+        }
+    }
+
+    /**
+     * @Route("/collaborateur/{id}", name="editEmploye")
+     */
+    public function editEmploye(Users $user, Request $request, EntityManagerInterface $manager){
+
+        $check = null;
+        for($i = 0; $i < count($user->getRoles()); $i++){
+            if($user->getRoles()[$i] === "ROLE_EMPLOYE"){
+                $check = true;
+            }
+        }
+
+        if($check === true){
+
+            $form = $this->createForm(EditEmployeType::class, $user);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()) {
+
+                $workingWeek = array();
+
+                if ($request->get('lundiCheck') === "on") {
+                    $lundi = array(
+                        'daysOfWeek' => [1],
+                        'startTime' => $request->get('lundiStart'),
+                        'endTime' => $request->get('lundiEnd')
+                    );
+                    $workingWeek[] = $lundi;
+                }
+
+                if ($request->get('mardiCheck') === "on") {
+                    $mardi = array(
+                        'daysOfWeek' => [2],
+                        'startTime' => $request->get('mardiStart'),
+                        'endTime' => $request->get('mardiEnd')
+                    );
+                    $workingWeek[] = $mardi;
+                }
+
+                if ($request->get('mercrediCheck') === "on") {
+                    $mercredi = array(
+                        'daysOfWeek' => [3],
+                        'startTime' => $request->get('mercrediStart'),
+                        'endTime' => $request->get('mercrediEnd')
+                    );
+                    $workingWeek[] = $mercredi;
+                }
+
+                if ($request->get('jeudiCheck') === "on") {
+                    $jeudi = array(
+                        'daysOfWeek' => [4],
+                        'startTime' => $request->get('jeudiStart'),
+                        'endTime' => $request->get('jeudiEnd')
+                    );
+                    $workingWeek[] = $jeudi;
+                }
+
+                if ($request->get('vendrediCheck') === "on") {
+                    $vendredi = array(
+                        'daysOfWeek' => [5],
+                        'startTime' => $request->get('vendrediStart'),
+                        'endTime' => $request->get('vendrediEnd')
+                    );
+                    $workingWeek[] = $vendredi;
+                }
+
+                if ($request->get('samediCheck') === "on") {
+                    $samedi = array(
+                        'daysOfWeek' => [6],
+                        'startTime' => $request->get('samediStart'),
+                        'endTime' => $request->get('samediEnd')
+                    );
+                    $workingWeek[] = $samedi;
+                }
+
+                if ($request->get('dimancheCheck') === "on") {
+                    $dimanche = array(
+                        'daysOfWeek' => [7],
+                        'startTime' => $request->get('dimancheStart'),
+                        'endTime' => $request->get('dimancheEnd')
+                    );
+                    $workingWeek[] = $dimanche;
+                }
+
+                $user->setWorkDays($workingWeek);
+
+                $manager->persist($user);
+                $manager->flush();
+
+                $this->addFlash('warning', "Les informations du collaborateur ont était modifié avec succès.");
+
+                return $this->redirectToRoute('editEmploye', [
+                    'id' => $user->getId()
+                ]);
+            }
+
+            return $this->render("users/edit_employes.html.twig", [
+                'employe' => $user,
+                'editEmploye' => $form->createView()
+            ]);
+
+        }else{
+            return $this->render("security/404.html.twig", [
+
+            ]);
+        }
+        
     }
 }

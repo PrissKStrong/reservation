@@ -9,8 +9,8 @@ function generateAvatar(
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
   
-    canvas.width = 40;
-    canvas.height = 40;
+    canvas.width = 60;
+    canvas.height = 60;
   
     // Draw background
     context.fillStyle = backgroundColor;
