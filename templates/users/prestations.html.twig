@@ -33,25 +33,28 @@
 		</div>
 	</div>
 
+	<div class="container">
 
-	<div class="row ml-3">
-		<h2>Vos catégories</h2>
-	</div>
+		<div class="row ml-3">
+			<h2>Vos catégories</h2>
+		</div>
+		
 
-	<div class="row">
+		<div class="row">
 
-		{% for c in category %}
-			<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
-				<div class="card arrondi">
-					<div class="card-body">
-						<h5 class="card-title">{{ c.name }}</h5>
-						<img class="card-img-top" src="{{ asset('images/'~c.image) }}" width="150" height="150" alt="Card image cap">
-						<br><br>	
-						<a href="{{path('category_edit', { 'id': c.id })}}" class="btn btn-warning">Mise à jour</a>
+			{% for c in category %}
+				<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
+					<div class="card arrondi shadow bg-white">
+						<div class="card-body">
+							<h5 class="card-title">{{ c.name }}</h5>
+							<img class="card-img-top" src="{{ asset('images/'~c.image) }}" width="150" height="150" alt="Card image cap">
+							<br><br>	
+							<a href="{{path('category_edit', { 'id': c.id })}}" class="btn btn-warning">Mise à jour</a>
+						</div>
 					</div>
 				</div>
-			</div>
-		{% endfor %}
+			{% endfor %}
+		</div>
 	</div>
 
 	<div class="container">
@@ -109,29 +112,32 @@
 			</div>
 		</div>
 	</div>
-	<div class="row ml-3">
-		<h2>Vos prestations</h2>
-	</div>
 
-	<div class="row">
+	<div class="container">
+		<div class="row ml-3">
+			<h2>Vos prestations</h2>
+		</div>
 
-		{% for p in presta %}
-			<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
-				<div class="card arrondi">
-					<div class="card-body">
-						<h5 class="card-title ">{{ p.name }}</h5>
-						<img class="card-img-top" src="{{ asset('images/'~p.image) }}" width="150" height="150" alt="Card image cap">
-						<p class="card-text">
-							{{ p.prestaTime }} min</p>
-						{% if p.category %}
+		<div class="row">
+
+			{% for p in presta %}
+				<div class="col-lg-3 col-md-4 col-12 mt-5 mb-5">
+					<div class="card arrondi shadow bg-white">
+						<div class="card-body">
+							<h5 class="card-title ">{{ p.name }}</h5>
+							<img class="card-img-top" src="{{ asset('images/'~p.image) }}" width="150" height="150" alt="Card image cap">
 							<p class="card-text">
-								{{ p.category.name }}</p>
-						{% endif %}
-						<a href="{{path('prestation_edit', { 'id': p.id })}}" class="btn btn-warning">Mise à jour</a>
+								{{ p.prestaTime }} min</p>
+							{% if p.category %}
+								<p class="card-text">
+									{{ p.category.name }}</p>
+							{% endif %}
+							<a href="{{path('prestation_edit', { 'id': p.id })}}" class="btn btn-warning">Mise à jour</a>
+						</div>
 					</div>
 				</div>
-			</div>
-		{% endfor %}
+			{% endfor %}
+		</div>
 	</div>
 
 	{{ form_end(addPresta) }}
@@ -141,6 +147,13 @@
 {% block javascripts %}
 
 	<script>
+		
+		window.onload = () => {
+			document.querySelector('.button-left').addEventListener('click', function() {
+			  document.querySelector('.sidebar').classList.toggle('fliph');
+			})
+		}
+
 		document.getElementById('addBreakTimeBtn').addEventListener('click', function () {
 			document.getElementById('breaktime').style = "display:block;";
 			document.getElementById('prestaTime2').style = "display:block;";

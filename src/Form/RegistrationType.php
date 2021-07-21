@@ -17,19 +17,24 @@ class RegistrationType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'E-mail'
+                'label' => 'E-mail',
+                'required'   => true,
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe'
+                'label' => 'Mot de passe',
+                'required'   => true,
             ])
             ->add('confirm_password', PasswordType::class, [
-                'label' => 'Confirmation du mot de passe'
+                'label' => 'Confirmation du mot de passe',
+                'required'   => true,
             ])
             ->add('companyName', TextType::class, [
-                'label' => 'Nom de votre entreprise'
+                'label' => 'Nom de votre entreprise',
+                'required'   => true,
             ])
             ->add('tel', TelType::class, [
-                'label' => 'Numéro de mobile'
+                'label' => 'Numéro de mobile',
+                'required'   => true,
             ])
         ;
     }

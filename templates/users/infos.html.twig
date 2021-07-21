@@ -8,6 +8,7 @@
 {{ form_start(user) }}
 <br>
 <br>
+<div class="container">
 <div class="mb-5 p-5 shadow arrondi bg-light">
 
 <div class="row mt-3 ml-3 mb-4">
@@ -169,6 +170,7 @@
 
     
         </div>
+    </div>
 
 
 {{ form_end(user) }}
@@ -177,6 +179,12 @@
 
 {% block javascripts %}
     <script>
+
+        window.onload = () => {
+            document.querySelector('.button-left').addEventListener('click', function() {
+              document.querySelector('.sidebar').classList.toggle('fliph');
+            })
+        }
 
         var userId = document.getElementById('userId').value;
 

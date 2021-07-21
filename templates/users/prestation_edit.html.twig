@@ -69,23 +69,29 @@
 {% block javascripts %}
 
 	<script>
+		
+		window.onload = () => {
+			document.querySelector('.button-left').addEventListener('click', function() {
+			  document.querySelector('.sidebar').classList.toggle('fliph');
+			})
+		}
 
 		document.getElementById('addBreakTimeBtn').addEventListener('click', function () {
-document.getElementById('breaktime').style = "display:block;";
-document.getElementById('prestaTime2').style = "display:block;";
-document.getElementById('addBreakTimeBtn').style = "display:none;";
-})
+		document.getElementById('breaktime').style = "display:block;";
+		document.getElementById('prestaTime2').style = "display:block;";
+		document.getElementById('addBreakTimeBtn').style = "display:none;";
+		})
 
 
-document.getElementById('add_prestation_image').addEventListener('input', function (evt) {
+		document.getElementById('add_prestation_image').addEventListener('input', function (evt) {
 
-document.getElementById('nameFile').innerHTML = this.value;
+		document.getElementById('nameFile').innerHTML = this.value;
 
-var label = document.getElementsByClassName('custom-file-label');
-for (var i = 0; i < label.length; i++) {
-label[i].style.border = '2px solid green';
-}
+		var label = document.getElementsByClassName('custom-file-label');
+		for (var i = 0; i < label.length; i++) {
+		label[i].style.border = '2px solid green';
+		}
 
-});
+		});
 	</script>
 {% endblock javascripts %}

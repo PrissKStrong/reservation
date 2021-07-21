@@ -6,7 +6,7 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/lux/bootstrap.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css" integrity="sha256-u40zn9KeZYpMjgYaxWJccb4HnP0i8XI17xkXrEklevE=" crossorigin="anonymous">
-
+		
 		<link rel="apple-touch-icon" sizes="57x57" href="{{asset('logo/apple-icon-57x57.png')}}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{asset('logo/apple-icon-60x60.png')}}">
 		<link rel="apple-touch-icon" sizes="72x72" href="{{asset('logo/apple-icon-72x72.png')}}">
@@ -36,11 +36,20 @@
 
 			{% include "partials/header.html.twig" %}
 
-			<div class="container-fluid"> 
+			{% if not app.user %}
+				<div class="container-fluid"> 
+			{% endif %}
 				
 				{% block body %}{% endblock %}
 
-			</div>
+			{% if app.user %}
+					</section>
+				</div>
+			{% endif %}
+
+			{% if not app.user %}
+				</div> 
+			{% endif %}
 
 				{% include "partials/footer.html.twig" %}
 

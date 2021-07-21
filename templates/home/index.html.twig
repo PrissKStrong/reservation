@@ -1,91 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}
+
+    {% if not app.user %}
+        Accueil
+    {% endif %}
+
+    {% if app.user %}
+        Dashboards
+    {% endif %}
+
+{% endblock %}
 
 {% block body %}
 
+    {% if not app.user %}
 
-<div class="description row justify-content-center align-items-center py-5">
-    <img src="{{ asset('logo/logoAppSingle.png') }}" alt="" class="mb-3">
-    <h4 class="text-center">La solution de prise de rendez-vous qui s'adapte le plus facilement possible à votre profession ainsi qu'à votre entreprise.</h4>
-</div>
-
-
-<div class="row plusValue">
-    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center align-items-center flex-column px-5">
-        <i class="fas fa-calendar-alt goldIcon mb-3"></i>
-        <h6 class="text-light text-center">Un Agenda intélligent</h6>
-    </div>
-    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center align-items-center flex-column px-5">
-        <i class="far fa-check-circle goldIcon mb-3"></i>
-        <h6 class="text-light text-center">Prise de rendez-vous pensé pour être adaptable et simple</h6>
-    </div>
-    <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center align-items-center flex-column px-5">
-        <i class="far fa-bell goldIcon mb-3"></i>
-        <h6 class="text-light text-center">Vos clients reçoivent un sms pour ne pas oublier leur rendez-vous</h6>
-    </div>
-</div>
-
-
-<div class="row exemples bg-light align-items-center justify-content-around py-5">
-
-    <div class="col-12 d-flex justify-content-center align-items-center flex-column my-5">
-        <div class="d-flex justify-content-center align-items-center">
-            <img src="{{ asset('logo/logoAppSingle.png') }}" alt="" class="exempleLogoPart mr-2">
-            <h3 style="color: rgb(77, 77, 77); font-weight:800;">
-                Exemples d'utilisation
-            </h3>
+        <div class="description row justify-content-center align-items-center py-5">
+            <img src="{{ asset('logo/logoAppSingle.png') }}" alt="" class="mb-3">
+            <h4 class="text-center">La solution de prise de rendez-vous qui s'adapte le plus facilement possible à votre profession ainsi qu'à votre entreprise.</h4>
         </div>
-        <p class="my-5 w-75 text-center size-12">De nombreux métiers nécessite des prises de <b class="text-gold">rendez-vous</b> de la part de clients. Voici quelques exemples pour lesquels notre solution simplifiera votre activité.</p>
-    </div>
 
-    <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center align-items-center">
-        <div class="card shadow">
-            <img class="card-img-top imgCard" src="{{ asset('logo/salonCoiffure.jpg') }}" alt="Card image cap">
-            <div class="card-body bg-white">
-              <h5 class="card-title">Salon de coiffure</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-primary text-white discoverBtn">Découvrir</a>
+
+        <div class="row plusValue">
+            <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center align-items-center flex-column px-5">
+                <i class="fas fa-calendar-alt goldIcon mb-3"></i>
+                <h6 class="text-light text-center">Un Agenda intélligent</h6>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center align-items-center flex-column px-5">
+                <i class="far fa-check-circle goldIcon mb-3"></i>
+                <h6 class="text-light text-center">Prise de rendez-vous pensé pour être adaptable et simple</h6>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center align-items-center flex-column px-5">
+                <i class="far fa-bell goldIcon mb-3"></i>
+                <h6 class="text-light text-center">Vos clients reçoivent un sms pour ne pas oublier leur rendez-vous</h6>
             </div>
         </div>
-    </div>
 
-    <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center align-items-center">
-        <div class="card shadow">
-            <img class="card-img-top imgCard" src="{{ asset('logo/restaurant.jpg') }}" alt="Card image cap">
-            <div class="card-body bg-white">
-              <h5 class="card-title">Restaurant</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-primary text-white discoverBtn">Découvrir</a>
+
+        <div class="row exemples bg-light align-items-center justify-content-around py-5">
+
+            <div class="col-12 d-flex justify-content-center align-items-center flex-column my-5">
+                <div class="d-flex justify-content-center align-items-center">
+                    <img src="{{ asset('logo/logoAppSingle.png') }}" alt="" class="exempleLogoPart mr-2">
+                    <h3 style="color: rgb(77, 77, 77); font-weight:800;">
+                        Exemples d'utilisation
+                    </h3>
+                </div>
+                <p class="my-5 w-75 text-center size-12">De nombreux métiers nécessite des prises de <b class="text-gold">rendez-vous</b> de la part de clients. Voici quelques exemples pour lesquels notre solution simplifiera votre activité.</p>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center align-items-center">
+                <div class="card shadow">
+                    <img class="card-img-top imgCard" src="{{ asset('logo/salonCoiffure.jpg') }}" alt="Card image cap">
+                    <div class="card-body bg-white">
+                    <h5 class="card-title">Salon de coiffure</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary text-white discoverBtn">Découvrir</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center align-items-center">
+                <div class="card shadow">
+                    <img class="card-img-top imgCard" src="{{ asset('logo/restaurant.jpg') }}" alt="Card image cap">
+                    <div class="card-body bg-white">
+                    <h5 class="card-title">Restaurant</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary text-white discoverBtn">Découvrir</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center align-items-center">
+                <div class="card shadow">
+                    <img class="card-img-top imgCard" src="{{ asset('logo/garageAuto.jpg') }}" alt="Card image cap">
+                    <div class="card-body bg-white">
+                    <h5 class="card-title">Garage automobile</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary text-white discoverBtn">Découvrir</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center align-items-center">
-        <div class="card shadow">
-            <img class="card-img-top imgCard" src="{{ asset('logo/garageAuto.jpg') }}" alt="Card image cap">
-            <div class="card-body bg-white">
-              <h5 class="card-title">Garage automobile</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-primary text-white discoverBtn">Découvrir</a>
+        <div class="row solutionTest justify-content-center align-items-center py-5">
+
+            <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center flex-column my-5">
+                <h2 class="text-light">Tester gratuitement notre solution</h2>
+                <p class="text-light">N'hésitez pas à nous contacter pour toute demande concernant nos tarifs.</p>
+                <button class="btn btn-warning rounded">Demandez un devis</button>
             </div>
+
+            <div class="col-12 col-8 d-flex justify-content-center align-items-center">
+                <p class="text-light text-center w-75">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque labore deserunt unde eaque similique rerum autem eveniet recusandae quidem quo fugit ratione dolorem, non hic expedita! Aperiam esse porro non est obcaecati quisquam provident tempore ab dolorem laudantium recusandae labore tenetur, maxime vel necessitatibus consequuntur iste optio vero perspiciatis libero repellendus? Architecto aperiam quae, optio accusamus dolorum tenetur autem natus nobis tempore fuga, voluptas corrupti eius, omnis illo illum. Amet consequuntur earum consequatur minima assumenda totam veritatis dolorum! Molestias dicta dolorum excepturi delectus harum, ad eveniet fugiat porro. Dolore asperiores qui unde quae aut culpa, quam ratione iste explicabo reprehenderit beatae ullam nesciunt architecto officia necessitatibus temporibus nihil quo delectus natus! Totam rerum veritatis ullam labore. Repudiandae nisi voluptatibus provident, harum praesentium maxime, sed fugiat, ducimus nam architecto ea inventore!
+                </p>
+            </div>
+
         </div>
-    </div>
-</div>
-
-<div class="row solutionTest justify-content-center align-items-center py-5">
-
-    <div class="col-12 col-sm-6 d-flex justify-content-center align-items-center flex-column my-5">
-        <h2 class="text-light">Tester gratuitement notre solution</h2>
-        <p class="text-light">N'hésitez pas à nous contacter pour toute demande concernant nos tarifs.</p>
-        <button class="btn btn-warning rounded">Demandez un devis</button>
-    </div>
-
-    <div class="col-12 col-8 d-flex justify-content-center align-items-center">
-        <p class="text-light text-center w-75">
-           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque labore deserunt unde eaque similique rerum autem eveniet recusandae quidem quo fugit ratione dolorem, non hic expedita! Aperiam esse porro non est obcaecati quisquam provident tempore ab dolorem laudantium recusandae labore tenetur, maxime vel necessitatibus consequuntur iste optio vero perspiciatis libero repellendus? Architecto aperiam quae, optio accusamus dolorum tenetur autem natus nobis tempore fuga, voluptas corrupti eius, omnis illo illum. Amet consequuntur earum consequatur minima assumenda totam veritatis dolorum! Molestias dicta dolorum excepturi delectus harum, ad eveniet fugiat porro. Dolore asperiores qui unde quae aut culpa, quam ratione iste explicabo reprehenderit beatae ullam nesciunt architecto officia necessitatibus temporibus nihil quo delectus natus! Totam rerum veritatis ullam labore. Repudiandae nisi voluptatibus provident, harum praesentium maxime, sed fugiat, ducimus nam architecto ea inventore!
-        </p>
-    </div>
-
-</div>
+    {% endif %}
 {% endblock %}

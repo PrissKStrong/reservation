@@ -30,6 +30,7 @@ function generateAvatar(
   var avatar = document.getElementById("userMenu");
   var img = document.createElement('img');
       img.alt = "avatar de "+companyName;
+      img.classList.add('rounded-circle');
       img.src = this.generateAvatar(
         initial,
         "white",

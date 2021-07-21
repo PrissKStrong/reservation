@@ -1,83 +1,126 @@
-<header>
-	{% if not app.user %}
-		<div class="row justify-content-end align-items-center topBar">
-			<p class="text-light mb-0 mr-3">
-				Appelez-nous au 
-				<a href="tel:+33767535224" style="color:rgb(193, 147, 50);">+33 (0)7 67 53 52 24</a>
-			</p>
+{% if not app.user %}
 
-			<button class="btn btn-warning btnTopBar">Être rappelé</button>
-			<button class="btn btn-success btnTopBar"><a class="text-light" style="text-decoration: none;" href="{{ path('app_login') }}">Connexion</a></button>
+	<header>
+		
+			<div class="row justify-content-end align-items-center topBar">
+				<p class="text-light mb-0 mr-3">
+					Appelez-nous au 
+					<a href="tel:+33767535224" style="color:rgb(193, 147, 50);">+33 (0)7 67 53 52 24</a>
+				</p>
+
+				<button class="btn btn-warning btnTopBar">Être rappelé</button>
+				<button class="btn btn-success btnTopBar"><a class="text-light" style="text-decoration: none;" href="{{ path('app_login') }}">Connexion</a></button>
+			</div>
+		
+
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand ml-3" href="{{ path('home') }}"><img src="{{asset('logo/logoAppTransparent.png')}}" alt="" id="navLogo"></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarColor03">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link active" href="{{ path('home') }}">Accueil
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Prise de rdv</a>
+					</li>
+					{% if not app.user %}
+						{# <li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+						</li> #}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Solution</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Outil</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Exemples</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Tarifs</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Contact</a>
+						</li>
+					{% endif %}
+					{% if app.user %}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="userMenu"></a>
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item" href="{{ path('userInfos', { 'id': app.user.id }) }}">Gérer vos informations</a>
+								<a class="dropdown-item" href="{{ path('agenda', { 'id': app.user.id }) }}">Votre Agenda</a>
+								<a class="dropdown-item" href="{{ path('prestations', { 'id': app.user.id }) }}">Gestions des catégories et des prestations</a>
+								<div class="dropdown-divider"></div>
+								<a class="nav-link text-danger" href="{{ path('app_logout') }}">Deconnexion</a>
+							</div>
+						</li>
+						
+					{% endif %}
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	{% if not app.user %}
+	{% if app.request.get('_route') == 'home' %}
+		<div class="row banner">
+			<div class="shadow justify-content-center align-items-center  d-flex flex-column">
+				<h1 class="text-light">
+					Prise de Rendez-vous
+				</h1>
+				<h4 class="text-light">
+					Smart Agenda - 
+					Envoie de SMS -
+					Adaptable à n'importe quel site web
+				</h4>
+
+				<button class="btn btn-outline-light rounded">Voir la démo</button>
+			</div>
 		</div>
 	{% endif %}
+	{% endif %}
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand ml-3" href="{{ path('home') }}"><img src="{{asset('logo/logoAppTransparent.png')}}" alt="" id="navLogo"></a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+{% endif %}
 
-		<div class="collapse navbar-collapse" id="navbarColor03">
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link active" href="{{ path('home') }}">Accueil
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Prise de rdv</a>
-				</li>
-				{% if not app.user %}
-					{# <li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
-					</li> #}
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Solution</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Outil</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Exemples</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Tarifs</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_register') }}">Contact</a>
-					</li>
-				{% endif %}
-				{% if app.user %}
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="userMenu"></a>
-						<div class="dropdown-menu dropdown-menu-right">
-							<a class="dropdown-item" href="{{ path('userInfos', { 'id': app.user.id }) }}">Gérer vos informations</a>
-							<a class="dropdown-item" href="{{ path('agenda', { 'id': app.user.id }) }}">Votre Agenda</a>
-							<a class="dropdown-item" href="{{ path('prestations', { 'id': app.user.id }) }}">Gestions des catégories et des prestations</a>
-							<div class="dropdown-divider"></div>
-							<a class="nav-link text-danger" href="{{ path('app_logout') }}">Deconnexion</a>
-						</div>
-					</li>
-					<input type="hidden" id="companyName" value="{{app.user.companyName}}">
-				{% endif %}
-			</ul>
+{% if app.user %}
+<input type="hidden" id="companyName" value="{{app.user.companyName}}">
+
+<div class="main row">
+  <aside class="col-2 position-fixed asideBar">
+	<div class="sidebar left">
+
+	  <div class="user-panel">
+
+		<div class="pull-left image" id="userMenu">
 		</div>
-	</nav>
-</header>
-{% if not app.user %}
-	<div class="row banner">
-		<div class="shadow justify-content-center align-items-center  d-flex flex-column">
-			<h1 class="text-light">
-				Prise de Rendez-vous
-			</h1>
-			<h4 class="text-light">
-				Smart Agenda - 
-				Envoie de SMS -
-				Adaptable à n'importe quel site web
-			</h4>
 
-			<button class="btn btn-outline-light rounded">Voir la démo</button>
+		<div class="pull-left info">
+		  {% if app.user.companyName %}
+			<p>{{ app.user.companyName }}</p>
+			{% else %}
+			<p>{{ app.user.email }}</p>
+		  {% endif %}
 		</div>
+
+	  </div>
+		<ul class="list-sidebar bg-defoult">	
+			<li> <a href="{{ path('home') }}"><i class="fa fa-th-large mr-1"></i> <span class="nav-label">Dashboards</span> </a></li>
+			<li> <a href="{{ path('userInfos', { 'id': app.user.id }) }}"><i class="fas fa-user mr-1"></i> <span class="nav-label">Mes infos</span></a> </li>
+			<li> <a href="{{ path('prestations', { 'id': app.user.id }) }}"><i class="fas fa-briefcase mr-1"></i><span class="nav-label">Prestations</span></a> </li>
+			<li> <a href="{{ path('prestations', { 'id': app.user.id }) }}"><i class="fas fa-users mr-1"></i><span class="nav-label">Mes employés</span></a> </li>
+			<li> <a href="{{ path('agenda', { 'id': app.user.id }) }}"><i class="fas fa-calendar-alt mr-1"></i><span class="nav-label">Mon agenda</span></a> </li>
+			<li> <a href="{{ path('agenda', { 'id': app.user.id }) }}"><i class="fas fa-cog mr-1"></i><span class="nav-label">Paramètres</span></a> </li>
+			<li> <a href="{{ path('app_logout') }}"><i class="fas fa-power-off text-danger mr-1"></i> <span class="nav-label">Deconnexion</span></a> </li>
+			<li> <a href="#"><i class="fas fa-folder mr-1"></i> <span class="nav-label">Other Pages</span></a> </li>
+		</ul>
 	</div>
+  </aside>
+  <section class="contentRight col-10 px-5">
 {% endif %}
 
 {% for label,messages in app.flashes %}
@@ -89,4 +132,18 @@
 		</div>
 	</div>
 {% endfor %}
+
+
+{% block javascripts %}
+	<script>
+		window.onload = () => {
+			document.querySelector('.button-left').addEventListener('click', function() {
+			  document.querySelector('.sidebar').classList.toggle('fliph');
+			})
+		}
+	</script>
+{% endblock javascripts %}
+
+
+
 
